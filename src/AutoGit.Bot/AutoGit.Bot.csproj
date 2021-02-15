@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>8906bea2-4546-43f2-a2ee-774ea2de1c78</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoGit.Core\AutoGit.Core.csproj" />
+    <ProjectReference Include="..\AutoGit.Jobs\AutoGit.Jobs.csproj" />
+    <ProjectReference Include="..\AutoGit.ReleaseNotes\AutoGit.ReleaseNotes.csproj" />
+    <ProjectReference Include="..\AutoGit.WebHooks\AutoGit.WebHooks.csproj" />
+  </ItemGroup>
+
+</Project>

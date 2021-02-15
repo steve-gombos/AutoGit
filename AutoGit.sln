@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6BD7405D-E2A7-45EB-9478-BDF26F422983}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AB1E54A3-D88C-46EA-ADA3-C0A4EFF9CC77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.Core", "src\AutoGit.Core\AutoGit.Core.csproj", "{FCB4EC10-9340-4453-94C7-2B2E4505FD32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.WebHooks", "src\AutoGit.WebHooks\AutoGit.WebHooks.csproj", "{2B3BF2DC-0D51-4845-86BC-BBA04E676934}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.ReleaseNotes", "src\AutoGit.ReleaseNotes\AutoGit.ReleaseNotes.csproj", "{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.Jobs", "src\AutoGit.Jobs\AutoGit.Jobs.csproj", "{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.Bot", "src\AutoGit.Bot\AutoGit.Bot.csproj", "{0B531667-683C-410E-BA86-38C06BED8F2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCB4EC10-9340-4453-94C7-2B2E4505FD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB4EC10-9340-4453-94C7-2B2E4505FD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB4EC10-9340-4453-94C7-2B2E4505FD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB4EC10-9340-4453-94C7-2B2E4505FD32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3BF2DC-0D51-4845-86BC-BBA04E676934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3BF2DC-0D51-4845-86BC-BBA04E676934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3BF2DC-0D51-4845-86BC-BBA04E676934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3BF2DC-0D51-4845-86BC-BBA04E676934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B531667-683C-410E-BA86-38C06BED8F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B531667-683C-410E-BA86-38C06BED8F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B531667-683C-410E-BA86-38C06BED8F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B531667-683C-410E-BA86-38C06BED8F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF693D59-852F-4C5F-B3AC-10F2D3C717E9}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FCB4EC10-9340-4453-94C7-2B2E4505FD32} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
+		{2B3BF2DC-0D51-4845-86BC-BBA04E676934} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
+		{8EC7F4BD-6682-4FFF-89F6-A4DBC8ECA3EA} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
+		{9DDCBA5C-BD61-46D7-864C-DB9F81D9C557} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
+		{0B531667-683C-410E-BA86-38C06BED8F2D} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
+	EndGlobalSection
+EndGlobal
