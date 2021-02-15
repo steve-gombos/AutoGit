@@ -1,4 +1,5 @@
 ﻿using AutoGit.WebHooks.Context;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AutoGit.WebHooks.Interfaces
@@ -7,7 +8,7 @@ namespace AutoGit.WebHooks.Interfaces
     {
         string EventName { get; }
         
-        string Action { get; }
+        List<string> Actions { get; }
         
         bool IncludeBotEvents { get; }
 

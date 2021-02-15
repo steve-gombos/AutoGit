@@ -16,7 +16,7 @@ namespace AutoGit.WebHooks
         public List<IWebHookHandler> Resolve(string eventName, string action, bool isBot)
         {
             return _handlers.Where(h => h.EventName == eventName &&
-                                        h.Action == action &&
+                                        h.Actions.Contains(action) &&
                                         h.IncludeBotEvents == isBot).ToList();
         }
     }

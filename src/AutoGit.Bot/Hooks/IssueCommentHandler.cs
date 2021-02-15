@@ -1,6 +1,7 @@
 ﻿using AutoGit.WebHooks.Context;
 using AutoGit.WebHooks.Interfaces;
 using Octokit;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AutoGit.Bot.Hooks
@@ -17,7 +18,7 @@ namespace AutoGit.Bot.Hooks
     public class IssueCommentHandler : IWebHookHandler
     {
         public string EventName { get; set; } = "issue_comment";
-        public string Action { get; } = "created";
+        public List<string> Actions { get; } = new List<string> {"created"};
         public bool IncludeBotEvents { get; } = false;
 
         public async Task Handle(EventContext eventContext)

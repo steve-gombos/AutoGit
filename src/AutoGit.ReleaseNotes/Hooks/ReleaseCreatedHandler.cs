@@ -13,7 +13,7 @@ namespace AutoGit.ReleaseNotes.Hooks
         private readonly ICommitFinder _commitFinder;
 
         public string EventName { get; } = "release";
-        public string Action { get; } = "created";
+        public List<string> Actions { get; } = new List<string> {"created"};
         public bool IncludeBotEvents { get; } = false;
         
         public ReleaseCreatedHandler(IEnumerable<IDocumentUpdater> documentUpdaters, ICommitFinder commitFinder)
