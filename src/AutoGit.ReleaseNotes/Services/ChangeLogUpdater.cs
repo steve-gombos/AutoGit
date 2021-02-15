@@ -29,7 +29,7 @@ namespace AutoGit.ReleaseNotes.Services
             var clients = await _gitHubClientFactory.Create();
 
             // Get the last registered formatter for the type.
-            var formatter = _documentFormatters.LastOrDefault(x => x.Type == FormatterType.ChangeLog);
+            var formatter = _documentFormatters.LastOrDefault(x => x.Type.HasFlag(FormatterType.ChangeLog));
 
             if (formatter == null)
                 return;

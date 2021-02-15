@@ -1,8 +1,12 @@
-﻿namespace AutoGit.ReleaseNotes.Models
+﻿using System;
+
+namespace AutoGit.ReleaseNotes.Models
 {
+    [Flags]
     public enum FormatterType
     {
-        Release,
-        ChangeLog
+        None = 0,
+        Release = 1,
+        ChangeLog = 2
     }
 }

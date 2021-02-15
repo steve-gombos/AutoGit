@@ -7,13 +7,13 @@ using System.Text;
 
 namespace AutoGit.ReleaseNotes.Formatters
 {
-    public class ChangeLogFormatter : IDocumentFormatter
+    public class DefaultFormatter : IDocumentFormatter
     {
         private readonly AutoGitReleaseOptions _options;
 
-        public FormatterType Type { get; } = FormatterType.ChangeLog;
+        public FormatterType Type { get; } = FormatterType.ChangeLog | FormatterType.Release;
 
-        public ChangeLogFormatter(IOptions<AutoGitReleaseOptions> options)
+        public DefaultFormatter(IOptions<AutoGitReleaseOptions> options)
         {
             _options = options.Value;
         }

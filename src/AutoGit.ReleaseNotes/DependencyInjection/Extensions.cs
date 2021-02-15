@@ -31,13 +31,13 @@ namespace AutoGit.ReleaseNotes.DependencyInjection
             if (releaseOptions.ManageReleaseNotes)
             {
                 builder.Services.AddTransient<IDocumentUpdater, ReleaseNoteUpdater>();
-                builder.Services.AddTransient<IDocumentFormatter, ReleaseNoteFormatter>();
+                builder.Services.AddTransient<IDocumentFormatter, DefaultFormatter>();
             }
 
             if (releaseOptions.ManageChangeLog)
             {
                 builder.Services.AddTransient<IDocumentUpdater, ChangeLogUpdater>();
-                builder.Services.AddTransient<IDocumentFormatter, ChangeLogFormatter>();
+                builder.Services.AddTransient<IDocumentFormatter, DefaultFormatter>();
             }
 
             return builder;

@@ -24,7 +24,7 @@ namespace AutoGit.ReleaseNotes.Services
             var clients = await _gitHubClientFactory.Create();
 
             // Get the last registered formatter for the type.
-            var formatter = _documentFormatters.LastOrDefault(x => x.Type == FormatterType.Release);
+            var formatter = _documentFormatters.LastOrDefault(x => x.Type.HasFlag(FormatterType.Release));
 
             if (formatter == null)
                 return;
