@@ -3,7 +3,7 @@
 namespace AutoGit.ReleaseNotes.Models
 {
     [Flags]
-    public enum FormatterType
+    public enum FormatterTypes
     {
         None = 0,
         Release = 1,

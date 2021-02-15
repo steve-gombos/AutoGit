@@ -11,7 +11,7 @@ namespace AutoGit.ReleaseNotes.Formatters
     {
         private readonly AutoGitReleaseOptions _options;
 
-        public FormatterType Type { get; } = FormatterType.ChangeLog | FormatterType.Release;
+        public FormatterTypes Type { get; } = FormatterTypes.ChangeLog | FormatterTypes.Release;
 
         public DefaultFormatter(IOptions<AutoGitReleaseOptions> options)
         {

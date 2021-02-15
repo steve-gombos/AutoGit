@@ -6,7 +6,7 @@ namespace AutoGit.ReleaseNotes.Interfaces
 {
     public interface IDocumentFormatter
     {
-        FormatterType Type { get; }
+        FormatterTypes Type { get; }
         DocumentDetails Format(Release release, List<GitHubCommit> commits);
     }
 }
