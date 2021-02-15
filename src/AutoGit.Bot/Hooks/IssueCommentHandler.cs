@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 
 namespace AutoGit.Bot.Hooks
 {
-    public class Test
-    {
-        private readonly IWebHookHandler _handler;
-
-        public Test(IWebHookHandler handler)
-        {
-            _handler = handler;
-        }
-    }
     public class IssueCommentHandler : IWebHookHandler
     {
         public string EventName { get; set; } = "issue_comment";
