@@ -14,7 +14,7 @@ namespace AutoGit.Core.Extensions
                 var result = await client.GetAllContents(repositoryId, path);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // do nothing
             }
@@ -29,7 +29,7 @@ namespace AutoGit.Core.Extensions
                 var result = await client.GetAllContents(repositoryId, path);
                 return result.First();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // do nothing
             }
