@@ -62,8 +62,8 @@ namespace AutoGit.Core.Resiliency
             var githubResponse = await GetGitHubResponse(httpResponse).ConfigureAwait(false);
            
             _logger?.LogInformation("Remaining Limit: {remaining} - Reset At: {reset}",
-                (int)githubResponse.ApiInfo.RateLimit.Remaining,
-                (DateTimeOffset)githubResponse.ApiInfo.RateLimit.Reset.ToLocalTime());
+                githubResponse.ApiInfo.RateLimit.Remaining,
+                githubResponse.ApiInfo.RateLimit.Reset.ToLocalTime());
 
             TryToThrowGitHubRelatedErrors(githubResponse);
 
