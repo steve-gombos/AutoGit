@@ -26,16 +26,20 @@ namespace AutoGit.Core.Services
 
             var policy = policies.Length > 1 ? Policy.WrapAsync(policies) : policies[0];
 
-            var githubConnection = new Connection(productHeaderValue,
-               gitHubUrl ?? GitHubClient.GitHubApiUrl,
-               new InMemoryCredentialStore(credentials),
-               new HttpClientAdapter(() => GetHttpHandlerChain(_logger, policy, cacheProvider)),
-               new SimpleJsonSerializer()
-               );
+            var githubConnection = new Connection(productHeaderValue, gitHubUrl ?? GitHubClient.GitHubApiUrl,
+                new InMemoryCredentialStore(credentials),
+                new HttpClientAdapter(() => GetHttpHandlerChain(_logger, policy, cacheProvider)),
+                new SimpleJsonSerializer());
 
             var githubClient = new GitHubClient(githubConnection);
 
             return githubClient;
+        }
+
+        public GitHubClient Create(ProductHeaderValue productHeaderValue, Uri gitHubUrl = null,
+            ICacheProvider cacheProvider = null, params IAsyncPolicy[] policies)
+        {
+            return Create(productHeaderValue, Credentials.Anonymous, gitHubUrl, cacheProvider, policies);
         }
 
         private HttpMessageHandler GetHttpHandlerChain(ILogger logger, IAsyncPolicy policy, ICacheProvider cacheProvider)
@@ -50,15 +54,6 @@ namespace AutoGit.Core.Services
             }
 
             return handler;
-        }
-
-        public GitHubClient Create(
-           ProductHeaderValue productHeaderValue,
-           Uri gitHubUrl = null,
-           ICacheProvider cacheProvider = null,
-           params IAsyncPolicy[] policies)
-        {
-            return Create(productHeaderValue, Credentials.Anonymous, gitHubUrl, cacheProvider, policies);
         }
     }
 }
