@@ -14,6 +14,11 @@ namespace AutoGit.WebHooks.Models
                 throw new ArgumentNullException(nameof(bindingContext));
             }
 
+            await BindModelInternalAsync(bindingContext);
+        }
+
+        private async Task BindModelInternalAsync(ModelBindingContext bindingContext)
+        {
             string payload;
             using(var sr = new StreamReader(bindingContext.HttpContext.Request.Body))
             {
