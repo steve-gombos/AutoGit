@@ -15,61 +15,73 @@ namespace AutoGit.Core.Resiliency
         {
             _logger = logger;
         }
-        public AsyncPolicy DefaultHttpRequestExceptionPolicy => Policy.Handle<HttpRequestException>()
-            .WaitAndRetryForeverAsync(
-            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-            onRetry: (exception, timespan) =>
-            {
-                _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds", "HttpRequestException",timespan.TotalSeconds);
-            });
 
-        public AsyncPolicy DefaultTimeoutExceptionPolicy => Policy.Handle<TaskCanceledException>(ex => !ex.CancellationToken.IsCancellationRequested)
+        public AsyncPolicy DefaultHttpRequestExceptionPolicy => Policy
+            .Handle<HttpRequestException>()
             .WaitAndRetryForeverAsync(
-            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-            onRetry: (exception, timespan) =>
-            {
-                _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds", "TaskCanceledException", timespan.TotalSeconds);
-            });
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (exception, timespan) =>
+                {
+                    _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
+                        "HttpRequestException", timespan.TotalSeconds);
+                });
 
-        public AsyncPolicy DefaultRateLimitExceededExceptionPolicy => Policy.Handle<RateLimitExceededException>()
+        public AsyncPolicy DefaultTimeoutExceptionPolicy => Policy
+            .Handle<TaskCanceledException>(ex => !ex.CancellationToken.IsCancellationRequested)
+            .WaitAndRetryForeverAsync(
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (exception, timespan) =>
+                {
+                    _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
+                        "TaskCanceledException", timespan.TotalSeconds);
+                });
+
+        public AsyncPolicy DefaultRateLimitExceededExceptionPolicy => Policy
+            .Handle<RateLimitExceededException>()
             .RetryAsync(
-            retryCount: 1,
-            onRetryAsync: async (exception, retryCount) =>
-            {
-                var e = exception as RateLimitExceededException;
+                retryCount: 1,
+                onRetryAsync: async (exception, retryCount) =>
+                {
+                    var e = exception as RateLimitExceededException;
 
-                var sleepMilliseconds = (int)(e.Reset.ToLocalTime() - DateTime.Now)
-                    .TotalMilliseconds + 5*1000; // wait for more 5 seconds to make sure there'll be no problem.
+                    var sleepMilliseconds = (int) (e.Reset.ToLocalTime() - DateTime.Now)
+                        .TotalMilliseconds + 5 * 1000; // wait for more 5 seconds to make sure there'll be no problem.
 
-                _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds", "RateLimitExceededException", sleepMilliseconds/1000);
+                    _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
+                        "RateLimitExceededException", sleepMilliseconds / 1000);
 
-                await Task.Delay(sleepMilliseconds).ConfigureAwait(false);
-            });
+                    await Task.Delay(sleepMilliseconds).ConfigureAwait(false);
+                });
 
-        public AsyncPolicy DefaultAbuseExceptionExceptionPolicy => Policy.Handle<AbuseException>()
-           .RetryAsync(
-            retryCount: 1,
-            onRetryAsync: async (exception, retryCount) =>
-            {
-                var e = exception as AbuseException;
+        public AsyncPolicy DefaultAbuseExceptionExceptionPolicy => Policy
+            .Handle<AbuseException>()
+            .RetryAsync(
+                retryCount: 1,
+                onRetryAsync: async (exception, retryCount) =>
+                {
+                    var e = exception as AbuseException;
 
-                var sleepMilliseconds = (int)TimeSpan.FromSeconds(e.RetryAfterSeconds.GetValueOrDefault(30))
-                    .TotalMilliseconds;
+                    var sleepMilliseconds = (int) TimeSpan.FromSeconds(e.RetryAfterSeconds.GetValueOrDefault(30))
+                        .TotalMilliseconds;
 
-                _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds", "AbuseException", sleepMilliseconds / 1000);
+                    _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
+                        "AbuseException", sleepMilliseconds / 1000);
 
-                await Task.Delay(sleepMilliseconds)
-                .ConfigureAwait(false);
-            });
+                    await Task.Delay(sleepMilliseconds).ConfigureAwait(false);
+                });
 
-        public AsyncPolicy DefaultOctokitApiExceptionExceptionPolicy => Policy.Handle<ApiException>()
-          .WaitAndRetryAsync(
-           retryCount: 3,
-           sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-           onRetryAsync: async (exception, retryCount) =>
-           {
-               _logger?.LogInformation("A {exception} has occurred with {message}. Will try again shortly.", "ApiException",exception.Message);
-           });
+        public AsyncPolicy DefaultOctokitApiExceptionExceptionPolicy => Policy
+            .Handle<ApiException>()
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetryAsync: (exception, retryCount) =>
+                {
+                    _logger?.LogInformation("A {exception} has occurred with {message}. Will try again shortly.",
+                        "ApiException", exception.Message);
+
+                    return Task.CompletedTask;
+                });
 
         public IAsyncPolicy[] DefaultResilientPolicies => new IAsyncPolicy[]{DefaultHttpRequestExceptionPolicy,
                 DefaultRateLimitExceededExceptionPolicy,

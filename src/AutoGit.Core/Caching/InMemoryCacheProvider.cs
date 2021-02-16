@@ -12,9 +12,10 @@ namespace AutoGit.Core.Caching
         {
             _cache= new MemoryCache(memoryCacheOptions?? new MemoryCacheOptions());
         }
-        public async Task Add(CacheKey key, CacheEntry entry)
+        public Task Add(CacheKey key, CacheEntry entry)
         {
-            _cache.Set(key,entry);
+            _cache.Set(key, entry);
+            return Task.CompletedTask;
         }
 
         public Task ClearAll()
@@ -22,19 +23,22 @@ namespace AutoGit.Core.Caching
             throw new InvalidOperationException("You cannot clear the in-memory cache");
         }
 
-        public async Task<bool> Exists(CacheKey key)
+        public Task<bool> Exists(CacheKey key)
         {
-           return _cache.TryGetValue(key,out _);
+            var result = _cache.TryGetValue(key, out _);
+            return Task.FromResult(result);
         }
 
-        public async Task<CacheEntry> Get(CacheKey key)
+        public Task<CacheEntry> Get(CacheKey key)
         {
-            return _cache.Get<CacheEntry>(key);
+            var result = _cache.Get<CacheEntry>(key);
+            return Task.FromResult(result);
         }
 
-        public async Task Remove(CacheKey key)
+        public Task Remove(CacheKey key)
         {
             _cache.Remove(key);
+            return Task.CompletedTask;
         }
     }
 }
