@@ -35,8 +35,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET }}
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Restore
       run: dotnet restore
     - name: Build
@@ -45,13 +43,13 @@ jobs:
       run: dotnet test -c ${{ env.CONFIGURATION }} --no-restore -v normal --collect:"XPlat Code Coverage"
     - name: Pack
       if: matrix.os == 'ubuntu-latest'
-      run: dotnet pack -c ${{ env.CONFIGURATION }} --no-restore -v normal --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID
+      run: dotnet pack -c ${{ env.CONFIGURATION }} --no-build --no-restore -v normal --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID
     - name: Upload Artifact
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: ./src/**/bin/Release/*.nupkg
+        path: '**.nupkg'
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
@@ -80,12 +78,15 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: nupkg
+      - name: Setup .NET ${{ env.DOTNET }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET }}			
+          source-url: https://nuget.pkg.github.com/${{ env.GITHUB_USER }}/index.json
       - name: Push to GitHub Feed
-        run: |
-          for f in ./nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+        run: dotnet nuget push ./nupkg/*.nupkg --source ${{ env.GITHUB_FEED }} --skip-duplicate
+        env:
+          NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
   deploy:
     needs: build
     if: github.event_name == 'release'
@@ -93,10 +94,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup .NET Core
+      - name: Setup .NET ${{ env.DOTNET }}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET }}									
+          dotnet-version: ${{ env.DOTNET }}			
+          source-url: https://nuget.pkg.github.com/${{ env.GITHUB_USER }}/index.json
       - name: Create Release NuGet package
         run: |
           arrTag=(${GITHUB_REF//\// })
@@ -106,11 +108,9 @@ jobs:
           echo Clean Version: $VERSION
           dotnet pack -c ${{ env.CONFIGURATION }} -v normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg
       - name: Push to GitHub Feed
-        run: |
-          for f in ./nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+        run: dotnet nuget push ./nupkg/*.nupkg --source ${{ env.GITHUB_FEED }} --skip-duplicate
+        env:
+          NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
       - name: Push to NuGet Feed
-        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_TOKEN
+        run: dotnet nuget push ./nupkg/*.nupkg --source ${{ env.NUGET_FEED }} --skip-duplicate --api-key ${{ env.NUGET_TOKEN }}
  
