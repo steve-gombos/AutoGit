@@ -13,7 +13,7 @@ env:
   # SonarCloud Access Token
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/steve-gombos/index.json
+  GITHUB_FEED: https://nuget.pkg.github.com/steve-gombos/
   GITHUB_USER: steve-gombos
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Official Nuget Feed settings
@@ -58,6 +58,7 @@ jobs:
         file: /**/*coverage*.xml
         flags: ${{ matrix.os }},netcore${{ matrix.dotnet }}
   sonarscan:
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -79,12 +80,12 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: nupkg
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET }}
       - name: Push to GitHub Feed
-        run: dotnet nuget push ./nupkg/*.nupkg --source $GITHUB_FEED --skip-duplicate --api-key $GITHUB_TOKEN
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          done
   deploy:
     needs: build
     if: github.event_name == 'release'
@@ -96,7 +97,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET }}
-          source-url: ${{ env.GITHUB_FEED }}
+											
       - name: Create Release NuGet package
         run: |
           arrTag=(${GITHUB_REF//\// })
@@ -106,7 +107,11 @@ jobs:
           echo Clean Version: $VERSION
           dotnet pack -c ${{ env.CONFIGURATION }} -v normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg
       - name: Push to GitHub Feed
-        run: dotnet nuget push ./nupkg/*.nupkg --source $GITHUB_FEED --skip-duplicate --api-key $GITHUB_TOKEN
+        run: |
+          for f in ./nupkg/*.nupkg
+          do
+            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          done
       - name: Push to NuGet Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_TOKEN
  
