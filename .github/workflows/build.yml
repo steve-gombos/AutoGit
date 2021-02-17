@@ -17,8 +17,8 @@ env:
   # SonarCloud Access Token
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/${{ env.GITHUB_USER }}/index.json
   GITHUB_USER: steve-gombos
+  GITHUB_FEED: https://nuget.pkg.github.com/${{ env.GITHUB_USER }}/index.json
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Official Nuget Feed settings
   NUGET_FEED: https://api.nuget.org/v3/index.json
