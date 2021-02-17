@@ -107,7 +107,7 @@ jobs:
           arrTag=(${GITHUB_REF//\// })
           VERSION="${arrTag[2]}"
           echo Version: $VERSION
-          VERSION="${VERSION//v}"
+          VERSION="${VERSION:1}"
           echo Clean Version: $VERSION
           dotnet pack -c ${{ env.CONFIGURATION }} -v normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg
       - name: Push to GitHub Feed
