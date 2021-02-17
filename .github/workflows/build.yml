@@ -99,6 +99,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET }}			
           source-url: https://nuget.pkg.github.com/${{ env.GITHUB_USER }}/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
       - name: Create Release NuGet package
         run: |
           arrTag=(${GITHUB_REF//\// })
@@ -109,8 +111,6 @@ jobs:
           dotnet pack -c ${{ env.CONFIGURATION }} -v normal --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg
       - name: Push to GitHub Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source ${{ env.GITHUB_FEED }} --skip-duplicate
-        env:
-          NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
       - name: Push to NuGet Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source ${{ env.NUGET_FEED }} --skip-duplicate --api-key ${{ env.NUGET_TOKEN }}
  
