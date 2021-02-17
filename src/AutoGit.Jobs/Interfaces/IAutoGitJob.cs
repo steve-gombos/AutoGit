@@ -4,9 +4,9 @@ namespace AutoGit.Jobs.Interfaces
 {
     public interface IAutoGitJob
     {
-        string RepositoryOwner { get; set; }
+        string RepositoryOwner { get; }
 
-        string RepositoryName { get; set; }
+        string RepositoryName { get; }
 
         Task Execute();
     }
