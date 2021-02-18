@@ -1,25 +1,32 @@
-﻿using AutoGit.Core.Interfaces;
+﻿using AutoGit.Core;
+using AutoGit.Core.Interfaces;
 using AutoGit.WebHooks.Interfaces;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 
 namespace AutoGit.WebHooks.DependencyInjection
 {
     public static class Extensions
     {
-        public static IAutoGitBuilder AddWebHookHandlers(this IAutoGitBuilder builder, Action<AutoGitEventOptions> setupAction = null)
+        public static IAutoGitBuilder AddWebHookHandlers(this IAutoGitBuilder builder, Action<AutoGitWebHookOptions> setupAction = null)
         {
-            AutoGitEventOptions options = new AutoGitEventOptions();
+            AutoGitWebHookOptions options = new AutoGitWebHookOptions();
             setupAction?.Invoke(options);
 
             builder.Services.Configure(setupAction);
 
-            builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            builder.Services.AddControllers().AddFluentValidation(f =>
+            {
+                f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
+
+            //builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             options.WebHookHandlers.ForEach(h =>
             {
@@ -34,20 +41,32 @@ namespace AutoGit.WebHooks.DependencyInjection
             return builder;
         }
 
-        public static void AddHandler<TEvent>(this AutoGitEventOptions eventOptions) where TEvent : IWebHookHandler
+        public static void AddHandler<TEvent>(this AutoGitWebHookOptions webHookOptions) where TEvent : IWebHookHandler
         {
-            eventOptions.WebHookHandlers.Add(typeof(TEvent));
+            webHookOptions.WebHookHandlers.Add(typeof(TEvent));
         }
 
-        public static IEndpointConventionBuilder MapAutoGitEndpoints(this IEndpointRouteBuilder endpoints)
+        public static IApplicationBuilder UseAutoGitEndpoints(this IApplicationBuilder app, string hookEndpoint = "/hooks")
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapAutoGitEndpoints(hookEndpoint);
+            });
+
+            return app;
+        }
+
+        public static IEndpointConventionBuilder MapAutoGitEndpoints(this IEndpointRouteBuilder endpoints, string hookEndpoint = "/hooks")
         {
             var app = endpoints.CreateApplicationBuilder();
 
-            var pipeline = app.UsePathBase("/github/hooks")
+            var options = app.ApplicationServices.GetService<IOptions<AutoGitOptions>>().Value;
+
+            var pipeline = endpoints.CreateApplicationBuilder()
                 .UseMiddleware<WebHookMiddleware>()
                 .Build();
 
-            return endpoints.Map("/github/hooks", pipeline);
+            return endpoints.Map(hookEndpoint, pipeline);
         }
     }
 }

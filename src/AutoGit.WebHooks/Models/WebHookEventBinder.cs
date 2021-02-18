@@ -25,7 +25,7 @@ namespace AutoGit.WebHooks.Models
                 payload = await sr.ReadToEndAsync();
             }
 
-            var webHookEvent = new WebHookEvent(bindingContext, payload);
+            var webHookEvent = new WebHookEvent(bindingContext.HttpContext, payload);
 
             bindingContext.Result = ModelBindingResult.Success(webHookEvent);
         }

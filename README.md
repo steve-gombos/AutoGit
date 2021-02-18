@@ -97,3 +97,46 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
    app.UseAutoGitScheduler();
 }
 ```
+
+Next you will either need to create a controller or you can register the automatic endpoint at `/hooks` via the Endpoint Routing Middlware, which is also can be overriden to suit your needs.
+
+#### Endpoint Routing Example
+
+```csharp
+public void Configure(IApplicationBuilder app)
+{
+   // Choose either to enable endpoints like this:
+   app.UseAutoGitEndpoints();
+   
+   // Or you can map the endpoints like this:
+   app.UseEndpoints(endpoints =>
+   {
+       endpoints.MapAutoGitEndpoints();
+   });
+}
+```
+
+#### Controller Example
+
+```csharp
+[Route("[controller]")]
+[ApiController]
+public class HooksController : ControllerBase
+{
+   private readonly IWebHookHandlerRegistry _webHookHandlerRegistry;
+   
+   public HooksController(IWebHookHandlerRegistry webHookHandlerRegistry)
+   {
+      _webHookHandlerRegistry = webHookHandlerRegistry;
+   }
+   
+   [HttpPost]
+   public async Task<IActionResult> Hooks(WebHookEvent webHookEvent)
+   {
+      await _webHookHandlerRegistry.Handle(webHookEvent);
+   
+      return Ok();
+   }
+}
+```
+

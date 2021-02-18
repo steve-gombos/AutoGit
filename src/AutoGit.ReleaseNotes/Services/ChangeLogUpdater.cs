@@ -4,7 +4,6 @@ using AutoGit.ReleaseNotes.Interfaces;
 using AutoGit.ReleaseNotes.Models;
 using Microsoft.Extensions.Options;
 using Octokit;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

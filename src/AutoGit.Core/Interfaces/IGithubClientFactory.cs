@@ -1,5 +1,4 @@
-﻿using AutoGit.Core.Services;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace AutoGit.Core.Interfaces
 {

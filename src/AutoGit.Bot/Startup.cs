@@ -26,7 +26,7 @@ namespace AutoGit.Bot
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
             var autoGitOptions = Configuration.GetSection("GitHub").Get<AutoGitOptions>();
 
             var webHookSecret = Configuration.GetValue<string>("GitHub:WebHookSecret");
@@ -64,17 +64,20 @@ namespace AutoGit.Bot
             }
 
             app.UseRouting();
+
+            //app.UseAutoGitEndpoints();
             
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapAutoGitEndpoints();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");
                 });
             });
             
-            app.UseAutoGitScheduler();
+            //app.UseAutoGitScheduler();
         }
     }
 }

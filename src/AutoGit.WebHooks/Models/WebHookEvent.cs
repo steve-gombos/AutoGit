@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Octokit;
 using Octokit.Internal;
 using System;
@@ -16,14 +16,14 @@ namespace AutoGit.WebHooks.Models
         private readonly string _hubSignature;
         private readonly string _gitHubDelivery;
 
-        internal WebHookEvent(ModelBindingContext bindingContext, string payload)
+        internal WebHookEvent(HttpContext httpContext, string payload)
         {
             _payload = payload;
             _serializer = new SimpleJsonSerializer();
             
-            EventName = bindingContext.HttpContext.Request.Headers[WebHookConstants.EventHeader];
-            _gitHubDelivery = bindingContext.HttpContext.Request.Headers[WebHookConstants.DeliveryHeader];
-            _hubSignature = bindingContext.HttpContext.Request.Headers[WebHookConstants.HubSignatureHeader];
+            EventName = httpContext.Request.Headers[WebHookConstants.EventHeader];
+            _gitHubDelivery = httpContext.Request.Headers[WebHookConstants.DeliveryHeader];
+            _hubSignature = httpContext.Request.Headers[WebHookConstants.HubSignatureHeader];
         }
 
         public string EventName { get; }
