@@ -1,9 +1,12 @@
 ﻿using AutoGit.Core.Interfaces;
+using AutoGit.Jobs.Filters;
 using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 
 namespace AutoGit.Jobs.DependencyInjection
 {
@@ -28,7 +31,14 @@ namespace AutoGit.Jobs.DependencyInjection
 
         public static IApplicationBuilder UseAutoGitScheduler(this IApplicationBuilder app)
         {
-            app.UseHangfireDashboard();
+            //TODO: make this configurable
+            app.UseHangfireDashboard("/jobs", new DashboardOptions
+            {
+                Authorization = new List<IDashboardAuthorizationFilter>
+                {
+                    new NullAuthorizationFilter()
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {

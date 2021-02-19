@@ -24,7 +24,7 @@ namespace AutoGit.Jobs
             {
                 var instance = ActivatorUtilities.CreateInstance<TJob>(provider);
 
-                var attributes = instance.GetType().GetCustomAttributes(true).OfType<JobAttribute>();
+                var attributes = instance.GetType().GetCustomAttributes(true).OfType<StandardJobAttribute>();
 
                 foreach (var attribute in attributes)
                 {

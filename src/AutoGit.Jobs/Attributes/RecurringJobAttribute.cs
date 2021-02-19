@@ -1,8 +1,8 @@
 ﻿namespace AutoGit.Jobs.Attributes
 {
-    public class RecurringJobAttribute : JobAttribute
+    public class RecurringJobAttribute : StandardJobAttribute
     {
-        public string CronExpression { get; set; }
+        public string CronExpression { get; }
 
         public RecurringJobAttribute(string cronExpression, bool runOnStart = false) : base(runOnStart)
         {
