@@ -4,6 +4,8 @@ using AutoGit.WebHooks.UnitTests.Fakers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSubstitute;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace AutoGit.WebHooks.UnitTests.Models
@@ -19,7 +21,7 @@ namespace AutoGit.WebHooks.UnitTests.Models
         }
 
         [Fact]
-        public async void Constructor_Should_Create_Instance()
+        public async void BindModel_Should_Return_Success_When_Context_Is_Not_Null()
         {
             // Arrange
             var modelBindingContext = new DefaultModelBindingContext();
@@ -32,6 +34,18 @@ namespace AutoGit.WebHooks.UnitTests.Models
             // Assert
             _webHookEventFactory.Received(1);
             modelBindingContext.Result.Should().Be(ModelBindingResult.Success(fakedWebHookEvent));
+        }
+        
+        [Fact]
+        public async void BindModel_Should_Throw_Exception_When_Context_Is_Null()
+        {
+            // Arrange
+
+            // Act
+            Func<Task> action = async () => await _sut.BindModelAsync(null);
+
+            // Assert
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
     }
 }
