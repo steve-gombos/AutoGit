@@ -38,7 +38,8 @@ namespace AutoGit.WebHooks.UnitTests
         [InlineData("pull_request", "completed", true, 1)]
         [InlineData("pull_request", "created", false, 2)]
         [InlineData("pull_request", "created", true, 1)]
-        public void Resolve_Should_Return_Valid_Handlers_When_Parameters_Are_Met(string eventName, string action, bool isBot,
+        public void Resolve_Should_Return_Valid_Handlers_When_Parameters_Are_Met(string eventName, string action,
+            bool isBot,
             int expected)
         {
             // Arrange

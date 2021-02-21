@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.Core.UnitTests", "t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.WebHooks.UnitTests", "tests\AutoGit.WebHooks.UnitTests\AutoGit.WebHooks.UnitTests.csproj", "{DE370900-8ECB-4B01-97AC-CE4452474A5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGit.Jobs.UnitTests", "tests\AutoGit.Jobs.UnitTests\AutoGit.Jobs.UnitTests.csproj", "{14895D67-DE94-4A57-A773-0EF549AE3E79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{DE370900-8ECB-4B01-97AC-CE4452474A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE370900-8ECB-4B01-97AC-CE4452474A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE370900-8ECB-4B01-97AC-CE4452474A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14895D67-DE94-4A57-A773-0EF549AE3E79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14895D67-DE94-4A57-A773-0EF549AE3E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14895D67-DE94-4A57-A773-0EF549AE3E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14895D67-DE94-4A57-A773-0EF549AE3E79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +76,6 @@ Global
 		{0B531667-683C-410E-BA86-38C06BED8F2D} = {6BD7405D-E2A7-45EB-9478-BDF26F422983}
 		{684FB6D3-4C1F-4C07-9591-A3CA3408258C} = {AB1E54A3-D88C-46EA-ADA3-C0A4EFF9CC77}
 		{DE370900-8ECB-4B01-97AC-CE4452474A5D} = {AB1E54A3-D88C-46EA-ADA3-C0A4EFF9CC77}
+		{14895D67-DE94-4A57-A773-0EF549AE3E79} = {AB1E54A3-D88C-46EA-ADA3-C0A4EFF9CC77}
 	EndGlobalSection
 EndGlobal

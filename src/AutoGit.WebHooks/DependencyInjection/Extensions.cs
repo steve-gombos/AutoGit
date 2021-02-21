@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace AutoGit.WebHooks.DependencyInjection
@@ -43,10 +44,21 @@ namespace AutoGit.WebHooks.DependencyInjection
         {
             webHookOptions.WebHookHandlers.Add(typeof(TEvent));
         }
+        
+        public static void AddHandler(this AutoGitWebHookOptions webHookOptions, Type handlerType)
+        {
+            var hasInterface = handlerType.GetInterface(nameof(IWebHookHandler));
+
+            if (hasInterface == null)
+                return;
+            
+            webHookOptions.WebHookHandlers.Add(handlerType);
+        }
 
         public static IApplicationBuilder UseAutoGitEndpoints(this IApplicationBuilder app,
             string hookEndpoint = "/hooks")
         {
+            app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapAutoGitEndpoints(hookEndpoint); });
 
             return app;

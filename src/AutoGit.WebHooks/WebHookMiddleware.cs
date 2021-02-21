@@ -1,8 +1,6 @@
 ﻿using AutoGit.WebHooks.Interfaces;
-using AutoGit.WebHooks.Models;
 using AutoGit.WebHooks.Models.Validators;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 

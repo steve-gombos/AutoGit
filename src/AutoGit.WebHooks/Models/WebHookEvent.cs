@@ -14,7 +14,8 @@ namespace AutoGit.WebHooks.Models
         private readonly string _payload;
         private readonly ISerializer _serializer;
 
-        public WebHookEvent(string eventName, string gitHubDelivery, string hubSignature, string payload, ISerializer serializer)
+        public WebHookEvent(string eventName, string gitHubDelivery, string hubSignature, string payload,
+            ISerializer serializer)
         {
             EventName = eventName;
             GitHubDelivery = gitHubDelivery;

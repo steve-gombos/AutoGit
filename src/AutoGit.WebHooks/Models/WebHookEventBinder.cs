@@ -1,7 +1,6 @@
 ﻿using AutoGit.WebHooks.Interfaces;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace AutoGit.WebHooks.Models

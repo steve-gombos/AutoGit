@@ -15,7 +15,7 @@ namespace AutoGit.WebHooks
         {
             _serializer = serializer;
         }
-        
+
         public async Task<WebHookEvent> Create(HttpContext context)
         {
             string payload;
@@ -29,7 +29,7 @@ namespace AutoGit.WebHooks
                 context.Request.Headers[WebHookConstants.HubSignatureHeader],
                 payload,
                 _serializer);
-            
+
             return webHookEvent;
         }
     }

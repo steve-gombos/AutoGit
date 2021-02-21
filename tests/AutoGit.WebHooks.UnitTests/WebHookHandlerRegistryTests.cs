@@ -10,16 +10,16 @@ namespace AutoGit.WebHooks.UnitTests
 {
     public class WebHookHandlerRegistryTests
     {
-        private readonly IWebHookHandlerRegistry _sut;
-        private readonly IWebHookHandlerResolver _webHookHandlerResolver = Substitute.For<IWebHookHandlerResolver>();
         private readonly IGitHubClientFactory _gitHubClientFactory = Substitute.For<IGitHubClientFactory>();
         private readonly IHttpContextAccessor _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
-        
+        private readonly IWebHookHandlerRegistry _sut;
+        private readonly IWebHookHandlerResolver _webHookHandlerResolver = Substitute.For<IWebHookHandlerResolver>();
+
         public WebHookHandlerRegistryTests()
         {
             _sut = new WebHookHandlerRegistry(_webHookHandlerResolver, _gitHubClientFactory, _httpContextAccessor);
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -34,10 +34,11 @@ namespace AutoGit.WebHooks.UnitTests
             mockedWebHookHandlers.AddRange(fakedWebHookHandlers);
             var webHookEventFaker = new WebHookEventFaker();
             var fakedWebHookEvent = webHookEventFaker.Generate();
-            
-            _webHookHandlerResolver.Resolve(fakedWebHookEvent.EventName, fakedWebHookEvent.GenericPayload.Action, fakedWebHookEvent.IsBot)
+
+            _webHookHandlerResolver.Resolve(fakedWebHookEvent.EventName, fakedWebHookEvent.GenericPayload.Action,
+                    fakedWebHookEvent.IsBot)
                 .Returns(mockedWebHookHandlers);
-        
+
             // Act
             await _sut.Handle(fakedWebHookEvent);
 

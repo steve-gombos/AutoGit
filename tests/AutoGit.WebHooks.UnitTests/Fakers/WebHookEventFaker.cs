@@ -13,12 +13,12 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
         public WebHookEventFaker()
         {
             UseSeed(Constants.DataSeed);
-            
+
             var fakedPayload = new PayloadFaker().Generate();
 
             CustomInstantiator(f => new WebHookEvent(f.Random.ListItem(Constants.Events), f.Random.Word(),
                 GetHubSignature(fakedPayload), fakedPayload, new OctokitSerializer()));
-            
+
             Configure(x =>
             {
                 x.WithLocale("en_US");
@@ -35,7 +35,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
 
             var hashValue = hmac.ComputeHash(msg);
             var calcHash = "sha1=" + BitConverter.ToString(hashValue).Replace("-", "").ToLowerInvariant();
-            
+
             return calcHash;
         }
     }

@@ -2,7 +2,6 @@
 using AutoGit.WebHooks.Models.Validators;
 using AutoGit.WebHooks.UnitTests.Fakers;
 using FluentAssertions;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -13,18 +12,19 @@ namespace AutoGit.WebHooks.UnitTests
 {
     public class WebHookMiddlewareTests
     {
-        private readonly WebHookMiddleware _sut;
         private readonly RequestDelegate _delegate = Substitute.For<RequestDelegate>();
+        private readonly WebHookMiddleware _sut;
 
         public WebHookMiddlewareTests()
         {
             _sut = new WebHookMiddleware(_delegate);
         }
-        
+
         [Theory]
         [InlineData(Constants.ValidWebHookSecret, 1, HttpStatusCode.OK)]
         [InlineData(Constants.InvalidWebHookSecret, 0, HttpStatusCode.Forbidden)]
-        public async void Invoke_Should_Return_Return_Correct_Status_Code(string secret, int registryCalls, HttpStatusCode statusCode)
+        public async void Invoke_Should_Return_Return_Correct_Status_Code(string secret, int registryCalls,
+            HttpStatusCode statusCode)
         {
             // Arrange
             var fakedWebHookEvent = new WebHookEventFaker().Generate();
@@ -43,7 +43,7 @@ namespace AutoGit.WebHooks.UnitTests
             // Assert
             mockedWebHookEventFactory.Received(1);
             mockedWebHookHandlerRegistry.Received(registryCalls);
-            fakedHttpContext.Response.StatusCode.Should().Be((int)statusCode);
+            fakedHttpContext.Response.StatusCode.Should().Be((int) statusCode);
         }
     }
 }

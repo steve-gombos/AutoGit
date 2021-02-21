@@ -11,7 +11,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
             UseSeed(Constants.DataSeed);
 
             var fakedHttpContext = new HttpContextFaker().Generate();
-            
+
             var mockedModelBindingContext = Substitute.For<ModelBindingContext>();
             mockedModelBindingContext.HttpContext.Returns(fakedHttpContext);
 

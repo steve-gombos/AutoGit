@@ -12,6 +12,7 @@ namespace AutoGit.Core.Services
         {
             _serializer = new SimpleJsonSerializer();
         }
+
         public string Serialize<T>(T payload) where T : ActivityPayload
         {
             return _serializer.Serialize(payload);

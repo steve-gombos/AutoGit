@@ -13,7 +13,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
         public HttpContextFaker()
         {
             UseSeed(Constants.DataSeed);
-            
+
             Configure(x =>
             {
                 x.WithLocale("en_US");
@@ -39,8 +39,8 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
         private Stream GenerateBody()
         {
             var fakedPayload = new PayloadFaker().Generate();
-            byte[] byteArray = Encoding.UTF8.GetBytes(fakedPayload);
-            MemoryStream stream = new MemoryStream(byteArray);
+            var byteArray = Encoding.UTF8.GetBytes(fakedPayload);
+            var stream = new MemoryStream(byteArray);
 
             return stream;
         }

@@ -1,7 +1,6 @@
 ﻿using AutoBogus;
 using AutoBogus.NSubstitute;
 using AutoGit.WebHooks.Interfaces;
-using System.Collections.Generic;
 
 namespace AutoGit.WebHooks.UnitTests.Fakers
 {

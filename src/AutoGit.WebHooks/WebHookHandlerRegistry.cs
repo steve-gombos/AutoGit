@@ -26,7 +26,7 @@ namespace AutoGit.WebHooks
         {
             var clients = await _gitHubClientFactory.Create();
 
-            var handlers = _webHookHandlerResolver.Resolve(webHookEvent.EventName, 
+            var handlers = _webHookHandlerResolver.Resolve(webHookEvent.EventName,
                 webHookEvent.GenericPayload.Action, webHookEvent.IsBot);
 
             if (!handlers.Any())

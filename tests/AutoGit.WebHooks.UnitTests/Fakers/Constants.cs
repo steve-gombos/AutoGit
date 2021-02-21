@@ -8,7 +8,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
 
         public const string ValidWebHookSecret = "test1";
         public const string InvalidWebHookSecret = "test2";
-        
+
         public static List<string> Actions = new List<string>
         {
             "created",

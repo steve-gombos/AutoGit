@@ -30,12 +30,12 @@ namespace AutoGit.WebHooks.UnitTests.Models
 
             // Act
             await _sut.BindModelAsync(modelBindingContext);
-        
+
             // Assert
             _webHookEventFactory.Received(1);
             modelBindingContext.Result.Should().Be(ModelBindingResult.Success(fakedWebHookEvent));
         }
-        
+
         [Fact]
         public async void BindModel_Should_Throw_Exception_When_Context_Is_Null()
         {
