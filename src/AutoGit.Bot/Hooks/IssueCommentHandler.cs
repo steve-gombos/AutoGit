@@ -9,8 +9,8 @@ namespace AutoGit.Bot.Hooks
     public class IssueCommentHandler : IWebHookHandler
     {
         public string EventName { get; set; } = "issue_comment";
-        public List<string> Actions { get; } = new List<string> {"created"};
-        public bool IncludeBotEvents { get; } = false;
+        public List<string> Actions { get; set; } = new List<string> {"created"};
+        public bool IncludeBotEvents { get; set; } = false;
 
         public async Task Handle(EventContext eventContext)
         {
@@ -18,7 +18,7 @@ namespace AutoGit.Bot.Hooks
 
             if (payload.Sender.Type == AccountType.Bot)
                 return;
-            
+
             await eventContext.Clients.InstallationClient.Issue.Comment.Create(payload.Repository.Id,
                 payload.Issue.Number, "Hello World");
         }

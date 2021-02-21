@@ -29,10 +29,8 @@ namespace AutoGit.Jobs
                 foreach (var attribute in attributes)
                 {
                     if (attribute.RunOnStart)
-                    {
                         BackgroundJob.Enqueue(() => instance.Execute());
-                        //BackgroundJob.Enqueue<TJob>(job => job.Execute());
-                    }
+                    //BackgroundJob.Enqueue<TJob>(job => job.Execute());
 
                     switch (attribute)
                     {

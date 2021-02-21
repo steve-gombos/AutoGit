@@ -11,23 +11,21 @@ namespace AutoGit.ReleaseNotes.DependencyInjection
 {
     public static class Extensions
     {
-        public static IAutoGitBuilder AddReleaseNoteGenerator(this IAutoGitBuilder builder, Action<AutoGitReleaseOptions> setupAction = null)
+        public static IAutoGitBuilder AddReleaseNoteGenerator(this IAutoGitBuilder builder,
+            Action<AutoGitReleaseOptions> setupAction = null)
         {
-            AutoGitReleaseOptions releaseOptions = new AutoGitReleaseOptions();
+            var releaseOptions = new AutoGitReleaseOptions();
             setupAction?.Invoke(releaseOptions);
-            
+
             builder.Services.Configure(setupAction);
-            
+
             builder.AddWebHookHandlers(options =>
             {
-                if (releaseOptions.ManageReleaseNotes)
-                {
-                    options.AddHandler<ReleaseCreatedHandler>();
-                }
+                if (releaseOptions.ManageReleaseNotes) options.AddHandler<ReleaseCreatedHandler>();
             });
 
             builder.Services.AddTransient<ICommitFinder, CommitFinder>();
-            
+
             if (releaseOptions.ManageReleaseNotes)
             {
                 builder.Services.AddTransient<IDocumentUpdater, ReleaseNoteUpdater>();

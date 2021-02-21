@@ -1,10 +1,10 @@
 ﻿using AutoGit.WebHooks.Interfaces;
 using AutoGit.WebHooks.Models;
 using AutoGit.WebHooks.Models.Validators;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace AutoGit.WebHooks
 {
@@ -17,10 +17,11 @@ namespace AutoGit.WebHooks
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, IWebHookHandlerRegistry webHookHandlerRegistry, WebHookEventValidator validator)
+        public async Task Invoke(HttpContext httpContext, IWebHookHandlerRegistry webHookHandlerRegistry,
+            WebHookEventValidator validator)
         {
             string payload;
-            using(var sr = new StreamReader(httpContext.Request.Body))
+            using (var sr = new StreamReader(httpContext.Request.Body))
             {
                 payload = await sr.ReadToEndAsync();
             }
@@ -31,7 +32,7 @@ namespace AutoGit.WebHooks
 
             if (!result.IsValid)
             {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                httpContext.Response.StatusCode = (int) HttpStatusCode.Forbidden;
                 return;
             }
 

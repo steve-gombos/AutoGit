@@ -9,7 +9,7 @@ namespace AutoGit.Core.DependencyInjection
     {
         public static IAutoGitBuilder AddGitHubBot(this IServiceCollection services, Action<AutoGitOptions> setupAction)
         {
-            if(services == null)
+            if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
             if (setupAction == null)
@@ -19,6 +19,7 @@ namespace AutoGit.Core.DependencyInjection
 
             services.AddTransient<IAccessTokenFactory, AccessTokenFactory>();
             services.AddTransient<IGitHubClientFactory, GitHubClientFactory>();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
             return new AutoGitBuilder(services);
         }

@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace AutoGit.ReleaseNotes.Hooks
 {
-    public class ReleaseCreatedHandler : IWebHookHandler
+    internal sealed class ReleaseCreatedHandler : IWebHookHandler
     {
-        private readonly IEnumerable<IDocumentUpdater> _documentUpdaters;
         private readonly ICommitFinder _commitFinder;
+        private readonly IEnumerable<IDocumentUpdater> _documentUpdaters;
 
-        public string EventName { get; } = "release";
-        public List<string> Actions { get; } = new List<string> {"created"};
-        public bool IncludeBotEvents { get; } = false;
-        
         public ReleaseCreatedHandler(IEnumerable<IDocumentUpdater> documentUpdaters, ICommitFinder commitFinder)
         {
             _documentUpdaters = documentUpdaters;
             _commitFinder = commitFinder;
         }
+
+        public string EventName { get; set; } = "release";
+        public List<string> Actions { get; set; } = new List<string> {"created"};
+        public bool IncludeBotEvents { get; set; } = false;
 
         public async Task Handle(EventContext eventContext)
         {
@@ -32,9 +32,7 @@ namespace AutoGit.ReleaseNotes.Hooks
             var commits = await _commitFinder.GetCommits(repoId, releaseId);
 
             foreach (var documentUpdater in _documentUpdaters)
-            {
                 await documentUpdater.Update(payload.Repository, payload.Release, commits);
-            }
         }
     }
 }

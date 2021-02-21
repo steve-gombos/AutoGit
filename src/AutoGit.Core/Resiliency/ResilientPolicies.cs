@@ -11,7 +11,7 @@ namespace AutoGit.Core.Resiliency
     {
         private readonly ILogger _logger;
 
-        public ResilientPolicies(ILogger logger=null)
+        public ResilientPolicies(ILogger logger = null)
         {
             _logger = logger;
         }
@@ -19,8 +19,8 @@ namespace AutoGit.Core.Resiliency
         public AsyncPolicy DefaultHttpRequestExceptionPolicy => Policy
             .Handle<HttpRequestException>()
             .WaitAndRetryForeverAsync(
-                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                onRetry: (exception, timespan) =>
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (exception, timespan) =>
                 {
                     _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
                         "HttpRequestException", timespan.TotalSeconds);
@@ -29,8 +29,8 @@ namespace AutoGit.Core.Resiliency
         public AsyncPolicy DefaultTimeoutExceptionPolicy => Policy
             .Handle<TaskCanceledException>(ex => !ex.CancellationToken.IsCancellationRequested)
             .WaitAndRetryForeverAsync(
-                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                onRetry: (exception, timespan) =>
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (exception, timespan) =>
                 {
                     _logger?.LogInformation("A {exception} has occurred. Next try will happen in {time} seconds",
                         "TaskCanceledException", timespan.TotalSeconds);
@@ -39,8 +39,8 @@ namespace AutoGit.Core.Resiliency
         public AsyncPolicy DefaultRateLimitExceededExceptionPolicy => Policy
             .Handle<RateLimitExceededException>()
             .RetryAsync(
-                retryCount: 1,
-                onRetryAsync: async (exception, retryCount) =>
+                1,
+                async (exception, retryCount) =>
                 {
                     var e = exception as RateLimitExceededException;
 
@@ -56,8 +56,8 @@ namespace AutoGit.Core.Resiliency
         public AsyncPolicy DefaultAbuseExceptionExceptionPolicy => Policy
             .Handle<AbuseException>()
             .RetryAsync(
-                retryCount: 1,
-                onRetryAsync: async (exception, retryCount) =>
+                1,
+                async (exception, retryCount) =>
                 {
                     var e = exception as AbuseException;
 
@@ -73,9 +73,9 @@ namespace AutoGit.Core.Resiliency
         public AsyncPolicy DefaultOctokitApiExceptionExceptionPolicy => Policy
             .Handle<ApiException>()
             .WaitAndRetryAsync(
-                retryCount: 3,
-                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                onRetryAsync: (exception, retryCount) =>
+                3,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (exception, retryCount) =>
                 {
                     _logger?.LogInformation("A {exception} has occurred with {message}. Will try again shortly.",
                         "ApiException", exception.Message);
@@ -83,10 +83,13 @@ namespace AutoGit.Core.Resiliency
                     return Task.CompletedTask;
                 });
 
-        public IAsyncPolicy[] DefaultResilientPolicies => new IAsyncPolicy[]{DefaultHttpRequestExceptionPolicy,
-                DefaultRateLimitExceededExceptionPolicy,
-                DefaultAbuseExceptionExceptionPolicy,
-                DefaultTimeoutExceptionPolicy,
-                DefaultOctokitApiExceptionExceptionPolicy};
+        public IAsyncPolicy[] DefaultResilientPolicies => new IAsyncPolicy[]
+        {
+            DefaultHttpRequestExceptionPolicy,
+            DefaultRateLimitExceededExceptionPolicy,
+            DefaultAbuseExceptionExceptionPolicy,
+            DefaultTimeoutExceptionPolicy,
+            DefaultOctokitApiExceptionExceptionPolicy
+        };
     }
 }

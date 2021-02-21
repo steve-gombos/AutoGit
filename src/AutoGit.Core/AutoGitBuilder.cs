@@ -6,16 +6,13 @@ namespace AutoGit.Core
 {
     public class AutoGitBuilder : IAutoGitBuilder
     {
-        public IServiceCollection Services { get; }
-
         public AutoGitBuilder(IServiceCollection services)
         {
-            if(services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
+            if (services == null) throw new ArgumentNullException(nameof(services));
 
             Services = services;
         }
+
+        public IServiceCollection Services { get; }
     }
 }

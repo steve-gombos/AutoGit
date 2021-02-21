@@ -15,7 +15,7 @@ namespace AutoGit.Bot.Controllers
         {
             _webHookHandlerRegistry = webHookHandlerRegistry;
         }
-        
+
         [HttpPost("test")]
         public async Task<IActionResult> Hooks(WebHookEvent webHookEvent)
         {

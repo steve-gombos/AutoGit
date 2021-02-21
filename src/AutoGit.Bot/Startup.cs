@@ -1,10 +1,9 @@
 using AutoGit.Bot.Hooks;
-using AutoGit.Bot.Jobs;
 using AutoGit.Core;
 using AutoGit.Core.DependencyInjection;
-using AutoGit.WebHooks.DependencyInjection;
 using AutoGit.Jobs.DependencyInjection;
 using AutoGit.ReleaseNotes.DependencyInjection;
+using AutoGit.WebHooks.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +44,7 @@ namespace AutoGit.Bot
                 .AddJobs(options =>
                 {
                     options.ConnectionString = Configuration.GetConnectionString("AutoGit");
-                    options.AddRecurringJob<SimpleJob>();
+                    //options.AddRecurringJob<SimpleJob>();
                 })
                 .AddReleaseNoteGenerator(options =>
                 {
@@ -58,25 +57,19 @@ namespace AutoGit.Bot
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseRouting();
 
             //app.UseAutoGitEndpoints();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapAutoGitEndpoints();
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
             });
-            
+
             //app.UseAutoGitScheduler();
         }
     }

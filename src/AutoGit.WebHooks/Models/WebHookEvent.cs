@@ -11,16 +11,16 @@ namespace AutoGit.WebHooks.Models
     [ModelBinder(BinderType = typeof(WebHookEventBinder))]
     public class WebHookEvent
     {
+        private readonly string _gitHubDelivery;
+        private readonly string _hubSignature;
         private readonly string _payload;
         private readonly SimpleJsonSerializer _serializer;
-        private readonly string _hubSignature;
-        private readonly string _gitHubDelivery;
 
         internal WebHookEvent(HttpContext httpContext, string payload)
         {
             _payload = payload;
             _serializer = new SimpleJsonSerializer();
-            
+
             EventName = httpContext.Request.Headers[WebHookConstants.EventHeader];
             _gitHubDelivery = httpContext.Request.Headers[WebHookConstants.DeliveryHeader];
             _hubSignature = httpContext.Request.Headers[WebHookConstants.HubSignatureHeader];

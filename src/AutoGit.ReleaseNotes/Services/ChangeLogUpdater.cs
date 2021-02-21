@@ -12,11 +12,12 @@ namespace AutoGit.ReleaseNotes.Services
 {
     public class ChangeLogUpdater : IDocumentUpdater
     {
-        private readonly IGitHubClientFactory _gitHubClientFactory;
         private readonly IEnumerable<IDocumentFormatter> _documentFormatters;
+        private readonly IGitHubClientFactory _gitHubClientFactory;
         private readonly AutoGitReleaseOptions _options;
 
-        public ChangeLogUpdater(IGitHubClientFactory gitHubClientFactory, IEnumerable<IDocumentFormatter> documentFormatters, IOptions<AutoGitReleaseOptions> options)
+        public ChangeLogUpdater(IGitHubClientFactory gitHubClientFactory,
+            IEnumerable<IDocumentFormatter> documentFormatters, IOptions<AutoGitReleaseOptions> options)
         {
             _gitHubClientFactory = gitHubClientFactory;
             _documentFormatters = documentFormatters;
@@ -32,7 +33,7 @@ namespace AutoGit.ReleaseNotes.Services
 
             if (formatter == null)
                 return;
-            
+
             var document = formatter.Format(release, commits);
 
             var changeLog =

@@ -9,9 +9,9 @@ namespace AutoGit.Core
             AppClient = appClient;
             InstallationClient = installationClient;
         }
-        
+
         public GitHubClient AppClient { get; }
-        
+
         public GitHubClient InstallationClient { get; }
     }
 }

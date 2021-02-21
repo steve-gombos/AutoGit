@@ -12,17 +12,15 @@ namespace AutoGit.Jobs.DependencyInjection
 {
     public static class Extensions
     {
-        public static IAutoGitBuilder AddJobs(this IAutoGitBuilder builder, Action<AutoGitJobOptions> setupAction = null)
+        public static IAutoGitBuilder AddJobs(this IAutoGitBuilder builder,
+            Action<AutoGitJobOptions> setupAction = null)
         {
-            AutoGitJobOptions jobOptions = new AutoGitJobOptions();
+            var jobOptions = new AutoGitJobOptions();
             setupAction?.Invoke(jobOptions);
 
             builder.Services.Configure(setupAction);
 
-            builder.Services.AddHangfire(options =>
-            {
-                options.UseSqlServerStorage(jobOptions.ConnectionString);
-            });
+            builder.Services.AddHangfire(options => { options.UseSqlServerStorage(jobOptions.ConnectionString); });
 
             builder.Services.AddHangfireServer();
 
@@ -40,17 +38,11 @@ namespace AutoGit.Jobs.DependencyInjection
                 }
             });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHangfireDashboard();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapHangfireDashboard(); });
 
             var options = app.ApplicationServices.GetService<IOptions<AutoGitJobOptions>>().Value;
 
-            options.Jobs.ForEach(j =>
-            {
-                j.Invoke(app.ApplicationServices);
-            });
+            options.Jobs.ForEach(j => { j.Invoke(app.ApplicationServices); });
 
             return app;
         }

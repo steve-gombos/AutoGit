@@ -42,16 +42,14 @@ namespace AutoGit.Core.Services
             return Create(productHeaderValue, Credentials.Anonymous, gitHubUrl, cacheProvider, policies);
         }
 
-        private HttpMessageHandler GetHttpHandlerChain(ILogger logger, IAsyncPolicy policy, ICacheProvider cacheProvider)
+        private HttpMessageHandler GetHttpHandlerChain(ILogger logger, IAsyncPolicy policy,
+            ICacheProvider cacheProvider)
         {
             var handler = HttpMessageHandlerFactory.CreateDefault();
 
             handler = new GitHubResilientHandler(handler, policy, _logger);
 
-            if (cacheProvider != null)
-            {
-                handler = new HttpCacheHandler(handler,cacheProvider,logger); 
-            }
+            if (cacheProvider != null) handler = new HttpCacheHandler(handler, cacheProvider, logger);
 
             return handler;
         }

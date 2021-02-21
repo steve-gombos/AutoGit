@@ -17,9 +17,11 @@ namespace AutoGit.Core.Caching
             InnerHandler = innerHandler;
             _logger = logger;
         }
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
-            if(!RequestIsCachable(request))
+            if (!RequestIsCachable(request))
                 return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             var existingResponseEntry = await GetResponseFromCache(request).ConfigureAwait(false);
@@ -27,7 +29,7 @@ namespace AutoGit.Core.Caching
             if (existingResponseEntry == null)
             {
                 var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-                await AddOrUpdateCache(request,response).ConfigureAwait(false);
+                await AddOrUpdateCache(request, response).ConfigureAwait(false);
                 return response;
             }
             else
@@ -38,10 +40,11 @@ namespace AutoGit.Core.Caching
 
                 if (response.StatusCode == HttpStatusCode.NotModified)
                 {
-                    _logger?.LogInformation("Response returned from the cache. ETAG: {etag}, URI:{URI}",existingResponseEntry.ETag.Tag,
-                        request.RequestUri.AbsolutePath.ToString());
+                    _logger?.LogInformation("Response returned from the cache. ETAG: {etag}, URI:{URI}",
+                        existingResponseEntry.ETag.Tag,
+                        request.RequestUri.AbsolutePath);
 
-                    return CacheEntry.CreateHttpResponseMessage(existingResponseEntry,response);
+                    return CacheEntry.CreateHttpResponseMessage(existingResponseEntry, response);
                 }
 
                 await AddOrUpdateCache(request, response).ConfigureAwait(false);
@@ -58,7 +61,7 @@ namespace AutoGit.Core.Caching
             if (entryExists)
                 await _cache.Remove(primaryKey).ConfigureAwait(false);
 
-            await AddToCache(request,response).ConfigureAwait(false);
+            await AddToCache(request, response).ConfigureAwait(false);
         }
 
         private bool RequestIsCachable(HttpRequestMessage request)
@@ -70,15 +73,9 @@ namespace AutoGit.Core.Caching
         {
             if (entry == null || !entry.HasValidator) return;
 
-            if (entry.ETag != null)
-            {
-                request.Headers.IfNoneMatch.Add(entry.ETag);
-            }
-            
-            if(entry.LastModified!=null)
-            {
-                request.Headers.IfModifiedSince = entry.LastModified;
-            }
+            if (entry.ETag != null) request.Headers.IfNoneMatch.Add(entry.ETag);
+
+            if (entry.LastModified != null) request.Headers.IfModifiedSince = entry.LastModified;
         }
 
         private async Task AddToCache(HttpRequestMessage request, HttpResponseMessage response)
