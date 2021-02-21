@@ -18,15 +18,9 @@ namespace AutoGit.WebHooks
         }
 
         public async Task Invoke(HttpContext httpContext, IWebHookHandlerRegistry webHookHandlerRegistry,
-            WebHookEventValidator validator)
+            IWebHookEventFactory webHookEventFactory, WebHookEventValidator validator)
         {
-            string payload;
-            using (var sr = new StreamReader(httpContext.Request.Body))
-            {
-                payload = await sr.ReadToEndAsync();
-            }
-
-            var webHookEvent = new WebHookEvent(httpContext, payload);
+            var webHookEvent = await webHookEventFactory.Create(httpContext);
 
             var result = await validator.ValidateAsync(webHookEvent);
 

@@ -4,6 +4,8 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
 {
     public static class Constants
     {
+        public const int DataSeed = 1;
+        
         public static List<string> Actions = new List<string>
         {
             "created",

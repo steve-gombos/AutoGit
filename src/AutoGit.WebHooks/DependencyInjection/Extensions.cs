@@ -34,6 +34,7 @@ namespace AutoGit.WebHooks.DependencyInjection
 
             builder.Services.AddScoped<IWebHookHandlerRegistry, WebHookHandlerRegistry>();
             builder.Services.AddScoped<IWebHookHandlerResolver, WebHookHandlerResolver>();
+            builder.Services.AddScoped<IWebHookEventFactory, WebHookEventFactory>();
 
             return builder;
         }

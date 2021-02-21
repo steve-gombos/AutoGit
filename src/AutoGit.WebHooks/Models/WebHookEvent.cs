@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoGit.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Octokit;
-using Octokit.Internal;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,30 +10,28 @@ namespace AutoGit.WebHooks.Models
     [ModelBinder(BinderType = typeof(WebHookEventBinder))]
     public class WebHookEvent
     {
-        private readonly string _gitHubDelivery;
         private readonly string _hubSignature;
         private readonly string _payload;
-        private readonly SimpleJsonSerializer _serializer;
+        private readonly ISerializer _serializer;
 
-        public WebHookEvent(HttpContext httpContext, string payload)
+        public WebHookEvent(string eventName, string gitHubDelivery, string hubSignature, string payload, ISerializer serializer)
         {
+            EventName = eventName;
+            GitHubDelivery = gitHubDelivery;
+            _hubSignature = hubSignature;
             _payload = payload;
-            _serializer = new SimpleJsonSerializer();
-
-            EventName = httpContext.Request.Headers[WebHookConstants.EventHeader];
-            _gitHubDelivery = httpContext.Request.Headers[WebHookConstants.DeliveryHeader];
-            _hubSignature = httpContext.Request.Headers[WebHookConstants.HubSignatureHeader];
+            _serializer = serializer;
         }
 
-        public string EventName { get; private set; }
+        public string EventName { get; }
 
-        public long? InstallationId => GetInstallationId();
+        public string GitHubDelivery { get; }
 
         public bool IsBot => GenericPayload.Sender.Type == AccountType.Bot;
 
         public GenericPayload GenericPayload => _serializer.Deserialize<GenericPayload>(_payload);
 
-        public T GetPayload<T>()
+        public T GetPayload<T>() where T : ActivityPayload
         {
             return _serializer.Deserialize<T>(_payload);
         }
@@ -49,16 +46,6 @@ namespace AutoGit.WebHooks.Models
             var hashValue = hmac.ComputeHash(msg);
             var calcHash = "sha1=" + BitConverter.ToString(hashValue).Replace("-", "").ToLowerInvariant();
             return calcHash == _hubSignature;
-        }
-
-        private long? GetInstallationId()
-        {
-            if (string.IsNullOrWhiteSpace(_payload))
-                return null;
-
-            var payload = _serializer.Deserialize<GenericPayload>(_payload);
-
-            return payload?.Installation?.Id;
         }
     }
 }

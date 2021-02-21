@@ -9,7 +9,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
     {
         public WebHookHandlerFaker()
         {
-            UseSeed(1);
+            UseSeed(Constants.DataSeed);
 
             Configure(x => { x.WithBinder<NSubstituteBinder>(); });
 

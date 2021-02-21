@@ -3,6 +3,8 @@ using AutoBogus.NSubstitute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace AutoGit.WebHooks.UnitTests.Fakers
 {
@@ -10,7 +12,7 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
     {
         public HttpContextFaker()
         {
-            UseSeed(1);
+            UseSeed(Constants.DataSeed);
             
             Configure(x =>
             {
@@ -28,9 +30,19 @@ namespace AutoGit.WebHooks.UnitTests.Fakers
                             f.Random.ListItem(Constants.Events)),
                         new KeyValuePair<string, StringValues>(WebHookConstants.DeliveryHeader, f.Random.Word()),
                         new KeyValuePair<string, StringValues>(WebHookConstants.HubSignatureHeader, f.Random.Word())
-                    }
+                    },
+                    Body = GenerateBody()
                 }
             });
+        }
+
+        private Stream GenerateBody()
+        {
+            var fakedPayload = new PayloadFaker().Generate();
+            byte[] byteArray = Encoding.UTF8.GetBytes(fakedPayload);
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            return stream;
         }
     }
 }

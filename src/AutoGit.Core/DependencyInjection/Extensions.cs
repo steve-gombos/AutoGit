@@ -20,6 +20,7 @@ namespace AutoGit.Core.DependencyInjection
             services.AddTransient<IAccessTokenFactory, AccessTokenFactory>();
             services.AddTransient<IGitHubClientFactory, GitHubClientFactory>();
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+            services.AddTransient<ISerializer, OctokitSerializer>();
 
             return new AutoGitBuilder(services);
         }
