@@ -16,7 +16,7 @@ namespace AutoGit.WebHooks.Models
         private readonly string _payload;
         private readonly SimpleJsonSerializer _serializer;
 
-        internal WebHookEvent(HttpContext httpContext, string payload)
+        public WebHookEvent(HttpContext httpContext, string payload)
         {
             _payload = payload;
             _serializer = new SimpleJsonSerializer();
@@ -26,7 +26,7 @@ namespace AutoGit.WebHooks.Models
             _hubSignature = httpContext.Request.Headers[WebHookConstants.HubSignatureHeader];
         }
 
-        public string EventName { get; }
+        public string EventName { get; private set; }
 
         public long? InstallationId => GetInstallationId();
 
