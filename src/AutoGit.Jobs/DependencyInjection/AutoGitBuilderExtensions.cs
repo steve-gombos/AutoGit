@@ -33,8 +33,11 @@ namespace AutoGit.Jobs.DependencyInjection
                 {
                     options.UseMemoryStorage();
                 }
-
             });
+
+            foreach (var job in jobOptions.Jobs)
+            {
+            }
 
             builder.Services.AddHangfireServer();
 

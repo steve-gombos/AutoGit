@@ -1,4 +1,5 @@
 using AutoGit.Bot.Hooks;
+using AutoGit.Bot.Jobs;
 using AutoGit.Core;
 using AutoGit.Core.DependencyInjection;
 using AutoGit.Jobs.DependencyInjection;
@@ -44,7 +45,7 @@ namespace AutoGit.Bot
                 .AddJobs(options =>
                 {
                     options.ConnectionString = Configuration.GetConnectionString("AutoGit");
-                    //options.AddRecurringJob<SimpleJob>();
+                    options.AddRecurringJob<SimpleJob>();
                 })
                 .AddReleaseNoteGenerator(options =>
                 {
@@ -70,7 +71,7 @@ namespace AutoGit.Bot
                 endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
             });
 
-            //app.UseAutoGitScheduler();
+            app.UseAutoGitScheduler();
         }
     }
 }

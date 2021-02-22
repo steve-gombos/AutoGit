@@ -1,13 +1,15 @@
 ﻿using AutoGit.Core.DependencyInjection;
 using AutoGit.Core.Interfaces;
 using AutoGit.Jobs.DependencyInjection;
+using AutoGit.Jobs.UnitTests.Fakers;
 using FluentAssertions;
 using Hangfire;
-using Hangfire.Server;
-using Microsoft.AspNetCore.Http;
+using Hangfire.Storage;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace AutoGit.Jobs.UnitTests.DependencyInjection
@@ -36,51 +38,21 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
             // Assert
             service.Should().BeAssignableTo(serviceType);
         }
+        
+        [Fact]
+        public void ServiceProvider_Should_Have_Jobs_When_Added_With_Generic()
+        {
+            // Arrange
+            _sut.AddJobs(options => { options.AddRecurringJob<TestRecurringJob>(); });
+            var provider = _sut.Services.BuildServiceProvider();
+            var appBuilder = new ApplicationBuilder(provider);
+            appBuilder.UseAutoGitScheduler();
 
-        // [Fact]
-        // public void ServiceProvider_Should_Have_Web_Hook_Handlers_When_Added_With_Type()
-        // {
-        //     // Arrange
-        //     var fakedWebHookHandlers = new WebHookHandlerFaker().Generate(5);
-        //     _sut.AddWebHookHandlers(options =>
-        //     {
-        //         foreach (var handler in fakedWebHookHandlers) options.AddHandler(handler.GetType());
-        //     });
-        //     var provider = _sut.Services.BuildServiceProvider();
-        //
-        //     // Act
-        //     var services = provider.GetServices<IWebHookHandler>();
-        //
-        //     // Assert
-        //     services.Count().Should().Be(fakedWebHookHandlers.Count());
-        // }
-        //
-        // [Fact]
-        // public void ServiceProvider_Should_Have_Web_Hook_Handlers_When_Added_With_Generic()
-        // {
-        //     // Arrange
-        //     _sut.AddWebHookHandlers(options => { options.AddHandler<TestHandler>(); });
-        //     var provider = _sut.Services.BuildServiceProvider();
-        //
-        //     // Act
-        //     var services = provider.GetServices<IWebHookHandler>();
-        //
-        //     // Assert
-        //     services.Count().Should().Be(1);
-        // }
-        //
-        // [Fact]
-        // public void ServiceProvider_Should_Not_Have_Web_Hook_Handlers_When_Added_With_Invalid_Type()
-        // {
-        //     // Arrange
-        //     _sut.AddWebHookHandlers(options => { options.AddHandler(typeof(WebHookMiddleware)); });
-        //     var provider = _sut.Services.BuildServiceProvider();
-        //
-        //     // Act
-        //     var services = provider.GetServices<IWebHookHandler>();
-        //
-        //     // Assert
-        //     services.Count().Should().Be(0);
-        // }
+            // Act
+            var service = provider.GetService<JobStorage>();
+            
+            // Assert
+            service.GetConnection().GetRecurringJobs().Count().Should().Be(1);
+        }
     }
 }
