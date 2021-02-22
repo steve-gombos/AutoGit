@@ -62,8 +62,6 @@ namespace AutoGit.Bot
 
             app.UseRouting();
 
-            //app.UseAutoGitEndpoints();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

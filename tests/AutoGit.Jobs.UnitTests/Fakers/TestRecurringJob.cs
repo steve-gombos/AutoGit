@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace AutoGit.Jobs.UnitTests.Fakers
 {
-    [RecurringJob("0/5 * * * *")]
+    [RecurringJob("0/5 * * * *", true)]
     public class TestRecurringJob : IAutoGitJob
     {
         public string RepositoryOwner { get; }

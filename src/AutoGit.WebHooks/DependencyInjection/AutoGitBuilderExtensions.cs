@@ -22,8 +22,6 @@ namespace AutoGit.WebHooks.DependencyInjection
                 f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             });
 
-            //builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
             options.WebHookHandlers.ForEach(h => { builder.Services.AddScoped(typeof(IWebHookHandler), h); });
 
             builder.Services.AddHttpContextAccessor();

@@ -8,11 +8,8 @@ namespace AutoGit.WebHooks
 {
     public class WebHookMiddleware
     {
-        private readonly RequestDelegate _next;
-
         public WebHookMiddleware(RequestDelegate next)
         {
-            _next = next;
         }
 
         public async Task Invoke(HttpContext httpContext, IWebHookHandlerRegistry webHookHandlerRegistry,

@@ -12,7 +12,7 @@ namespace AutoGit.Core.Extensions
         {
             try
             {
-                var result = await client.GetAllContents(repositoryId, path);
+                await client.GetAllContents(repositoryId, path);
                 return true;
             }
             catch (Exception)

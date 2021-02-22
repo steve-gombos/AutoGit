@@ -35,10 +35,6 @@ namespace AutoGit.Jobs.DependencyInjection
                 }
             });
 
-            foreach (var job in jobOptions.Jobs)
-            {
-            }
-
             builder.Services.AddHangfireServer();
 
             return builder;

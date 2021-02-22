@@ -20,10 +20,6 @@ namespace AutoGit.WebHooks.DependencyInjection
         public static IEndpointConventionBuilder MapAutoGitEndpoints(this IEndpointRouteBuilder endpoints,
             string hookEndpoint = "/hooks")
         {
-            var app = endpoints.CreateApplicationBuilder();
-
-            var options = app.ApplicationServices.GetService<IOptions<AutoGitOptions>>().Value;
-
             var pipeline = endpoints.CreateApplicationBuilder()
                 .UseMiddleware<WebHookMiddleware>()
                 .Build();
