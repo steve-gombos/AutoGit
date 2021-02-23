@@ -16,7 +16,7 @@ namespace AutoGit.ReleaseNotes.Formatters
             _options = options.Value;
         }
 
-        public FormatterTypes Type { get; } = FormatterTypes.ChangeLog | FormatterTypes.Release;
+        public FormatterTypes Type { get; set; } = FormatterTypes.ChangeLog | FormatterTypes.Release;
 
         public DocumentDetails Format(Release release, List<GitHubCommit> commits)
         {

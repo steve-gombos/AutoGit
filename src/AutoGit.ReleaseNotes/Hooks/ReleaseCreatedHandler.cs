@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoGit.ReleaseNotes.Hooks
 {
-    internal sealed class ReleaseCreatedHandler : IWebHookHandler
+    public sealed class ReleaseCreatedHandler : IWebHookHandler
     {
         private readonly ICommitFinder _commitFinder;
         private readonly IEnumerable<IDocumentUpdater> _documentUpdaters;

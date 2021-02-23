@@ -9,7 +9,7 @@ using System;
 
 namespace AutoGit.ReleaseNotes.DependencyInjection
 {
-    public static class Extensions
+    public static class AutoGitBuilderExtensions
     {
         public static IAutoGitBuilder AddReleaseNoteGenerator(this IAutoGitBuilder builder,
             Action<AutoGitReleaseOptions> setupAction = null)
