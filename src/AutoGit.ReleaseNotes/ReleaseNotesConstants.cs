@@ -4,10 +4,10 @@ namespace AutoGit.ReleaseNotes
 {
     public class ReleaseNotesConstants
     {
+        public static readonly string VersionDivider = Environment.NewLine + "---" + Environment.NewLine;
+
         protected ReleaseNotesConstants()
         {
         }
-
-        public static readonly string VersionDivider = Environment.NewLine + "---" + Environment.NewLine;
     }
 }

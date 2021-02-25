@@ -6,11 +6,11 @@ namespace AutoGit.WebHooks.Interfaces
 {
     public interface IWebHookHandler
     {
-        string EventName { get; }
-        
-        List<string> Actions { get; }
-        
-        bool IncludeBotEvents { get; }
+        string EventName { get; set; }
+
+        List<string> Actions { get; set; }
+
+        bool IncludeBotEvents { get; set; }
 
         Task Handle(EventContext eventContext);
     }

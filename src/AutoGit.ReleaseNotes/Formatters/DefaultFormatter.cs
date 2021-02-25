@@ -11,12 +11,12 @@ namespace AutoGit.ReleaseNotes.Formatters
     {
         private readonly AutoGitReleaseOptions _options;
 
-        public FormatterTypes Type { get; } = FormatterTypes.ChangeLog | FormatterTypes.Release;
-
         public DefaultFormatter(IOptions<AutoGitReleaseOptions> options)
         {
             _options = options.Value;
         }
+
+        public FormatterTypes Type { get; set; } = FormatterTypes.ChangeLog | FormatterTypes.Release;
 
         public DocumentDetails Format(Release release, List<GitHubCommit> commits)
         {
@@ -28,9 +28,7 @@ namespace AutoGit.ReleaseNotes.Formatters
             sb.AppendLine($"# {name} ({release.CreatedAt:yyyy-MM-dd})");
 
             foreach (var commit in commits)
-            {
                 sb.AppendLine($"- [{commit.Commit.Message}]({commit.HtmlUrl}) - @{commit.Author.Login}");
-            }
 
             return new DocumentDetails
             {

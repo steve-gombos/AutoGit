@@ -10,11 +10,12 @@ namespace AutoGit.WebHooks
 {
     public class WebHookHandlerRegistry : IWebHookHandlerRegistry
     {
-        private readonly IWebHookHandlerResolver _webHookHandlerResolver;
         private readonly IGitHubClientFactory _gitHubClientFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWebHookHandlerResolver _webHookHandlerResolver;
 
-        public WebHookHandlerRegistry(IWebHookHandlerResolver webHookHandlerResolver, IGitHubClientFactory gitHubClientFactory, IHttpContextAccessor httpContextAccessor)
+        public WebHookHandlerRegistry(IWebHookHandlerResolver webHookHandlerResolver,
+            IGitHubClientFactory gitHubClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _webHookHandlerResolver = webHookHandlerResolver;
             _gitHubClientFactory = gitHubClientFactory;
@@ -25,8 +26,8 @@ namespace AutoGit.WebHooks
         {
             var clients = await _gitHubClientFactory.Create();
 
-            var handlers = _webHookHandlerResolver.Resolve(webHookEvent.EventName, webHookEvent.GenericPayload.Action,
-                webHookEvent.IsBot);
+            var handlers = _webHookHandlerResolver.Resolve(webHookEvent.EventName,
+                webHookEvent.GenericPayload.Action, webHookEvent.IsBot);
 
             if (!handlers.Any())
                 return;

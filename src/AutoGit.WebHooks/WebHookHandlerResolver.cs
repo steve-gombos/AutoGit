@@ -12,7 +12,7 @@ namespace AutoGit.WebHooks
         {
             _handlers = handlers;
         }
-        
+
         public List<IWebHookHandler> Resolve(string eventName, string action, bool isBot)
         {
             return _handlers.Where(h => h.EventName == eventName &&

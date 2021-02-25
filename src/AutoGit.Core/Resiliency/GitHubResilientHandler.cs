@@ -11,38 +11,35 @@ using System.Threading.Tasks;
 
 namespace AutoGit.Core.Resiliency
 {
-    class GitHubResilientHandler : DelegatingHandler
+    internal class GitHubResilientHandler : DelegatingHandler
     {
         // we need this instance to be able to call Octokit's internal code using reflection
-        private static Lazy<HttpClientAdapter> _httpClientAdapter = new Lazy<HttpClientAdapter>(()=> 
-            new HttpClientAdapter(()=>new GitHubResilientHandler()), true);
+        private static readonly Lazy<HttpClientAdapter> _httpClientAdapter = new Lazy<HttpClientAdapter>(() =>
+            new HttpClientAdapter(() => new GitHubResilientHandler()), true);
+
+        private readonly ILogger _logger;
 
         private readonly IAsyncPolicy _policy;
-        private readonly ILogger _logger;
 
         private GitHubResilientHandler()
         {
             _policy = null;
             _logger = null;
         }
-        public GitHubResilientHandler(HttpMessageHandler innerHandler,IAsyncPolicy policy,ILogger logger=null)
+
+        public GitHubResilientHandler(HttpMessageHandler innerHandler, IAsyncPolicy policy, ILogger logger = null)
         {
             InnerHandler = innerHandler;
             _policy = policy;
             _logger = logger;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
-            if (_policy == null)
-            {
-                throw new ArgumentNullException(nameof(_policy));
-            }
+            if (_policy == null) throw new ArgumentNullException(nameof(_policy));
 
             var httpResponse = await _policy.ExecuteAsync(async () => await SendCoreAsync(request, cancellationToken))
                 .ConfigureAwait(false);
@@ -50,17 +47,20 @@ namespace AutoGit.Core.Resiliency
             return httpResponse;
         }
 
-        private async Task<HttpResponseMessage> SendCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        private async Task<HttpResponseMessage> SendCoreAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
-            _logger?.LogInformation("{datetime}: Sending Request: {requestMethod} - {requestUrl}",DateTime.Now,request.Method.Method,request.RequestUri.ToString());
+            _logger?.LogInformation("{datetime}: Sending Request: {requestMethod} - {requestUrl}", DateTime.Now,
+                request.Method.Method, request.RequestUri.ToString());
 
             // cannot use the cancelationToken because its timeout is preconfigured to 100 seconds by Octokit
             var httpResponse = await base.SendAsync(request, CancellationToken.None).ConfigureAwait(false);
 
-            _logger?.LogInformation("{datetime}: Response Recieved. Status Code: {statusCode}",DateTime.Now,httpResponse.StatusCode.ToString());
+            _logger?.LogInformation("{datetime}: Response Recieved. Status Code: {statusCode}", DateTime.Now,
+                httpResponse.StatusCode.ToString());
 
             var githubResponse = await GetGitHubResponse(httpResponse).ConfigureAwait(false);
-           
+
             _logger?.LogInformation("Remaining Limit: {remaining} - Reset At: {reset}",
                 githubResponse.ApiInfo.RateLimit.Remaining,
                 githubResponse.ApiInfo.RateLimit.Reset.ToLocalTime());
@@ -72,11 +72,12 @@ namespace AutoGit.Core.Resiliency
 
         private void TryToThrowGitHubRelatedErrors(dynamic githubResponse)
         {
-            MethodInfo handleErrors = typeof(Connection).GetMethod("HandleErrors", BindingFlags.NonPublic | BindingFlags.Static);
+            var handleErrors =
+                typeof(Connection).GetMethod("HandleErrors", BindingFlags.NonPublic | BindingFlags.Static);
 
             try
             {
-                handleErrors.Invoke(this, new object[] { githubResponse });
+                handleErrors.Invoke(this, new object[] {githubResponse});
             }
             catch (TargetInvocationException e)
             {
@@ -86,12 +87,13 @@ namespace AutoGit.Core.Resiliency
 
         private async Task<IResponse> GetGitHubResponse(HttpResponseMessage httpResponse)
         {
-
-            MethodInfo buildResponseMethod = typeof(HttpClientAdapter).GetMethod("BuildResponse", BindingFlags.NonPublic | BindingFlags.Instance);
+            var buildResponseMethod =
+                typeof(HttpClientAdapter).GetMethod("BuildResponse", BindingFlags.NonPublic | BindingFlags.Instance);
 
             var clonedHttpResponse = await CloneResponseAsync(httpResponse).ConfigureAwait(false);
 
-            var githubResponse = await(dynamic) buildResponseMethod.Invoke(_httpClientAdapter.Value, new object[] { clonedHttpResponse });
+            var githubResponse =
+                await (dynamic) buildResponseMethod.Invoke(_httpClientAdapter.Value, new object[] {clonedHttpResponse});
 
             return githubResponse as IResponse;
         }
@@ -111,8 +113,8 @@ namespace AutoGit.Core.Resiliency
 
                 ms.Position = 0;
                 newResponse.Content = new StreamContent(ms);
-                foreach (var v in response.Content.Headers) newResponse.Content.Headers.TryAddWithoutValidation(v.Key, v.Value);
-                
+                foreach (var v in response.Content.Headers)
+                    newResponse.Content.Headers.TryAddWithoutValidation(v.Key, v.Value);
             }
 
             return newResponse;

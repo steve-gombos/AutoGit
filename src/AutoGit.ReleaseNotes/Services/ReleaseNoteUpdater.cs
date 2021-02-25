@@ -10,10 +10,11 @@ namespace AutoGit.ReleaseNotes.Services
 {
     public class ReleaseNoteUpdater : IDocumentUpdater
     {
-        private readonly IGitHubClientFactory _gitHubClientFactory;
         private readonly IEnumerable<IDocumentFormatter> _documentFormatters;
+        private readonly IGitHubClientFactory _gitHubClientFactory;
 
-        public ReleaseNoteUpdater(IGitHubClientFactory gitHubClientFactory, IEnumerable<IDocumentFormatter> documentFormatters)
+        public ReleaseNoteUpdater(IGitHubClientFactory gitHubClientFactory,
+            IEnumerable<IDocumentFormatter> documentFormatters)
         {
             _gitHubClientFactory = gitHubClientFactory;
             _documentFormatters = documentFormatters;
@@ -28,10 +29,10 @@ namespace AutoGit.ReleaseNotes.Services
 
             if (formatter == null)
                 return;
-            
+
             var document = formatter.Format(release, commits);
 
-            await clients.InstallationClient.Repository.Release.Edit(repository.Id, release.Id, 
+            await clients.InstallationClient.Repository.Release.Edit(repository.Id, release.Id,
                 new ReleaseUpdate
                 {
                     Name = document.Name,

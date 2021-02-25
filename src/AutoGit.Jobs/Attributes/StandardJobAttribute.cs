@@ -2,14 +2,14 @@
 
 namespace AutoGit.Jobs.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class StandardJobAttribute : Attribute
     {
-        public bool RunOnStart { get; }
-
         public StandardJobAttribute(bool runOnStart = false)
         {
             RunOnStart = runOnStart;
         }
+
+        public bool RunOnStart { get; }
     }
 }

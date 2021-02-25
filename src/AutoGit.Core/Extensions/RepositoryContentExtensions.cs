@@ -7,11 +7,12 @@ namespace AutoGit.Core.Extensions
 {
     public static class RepositoryContentExtensions
     {
-        public static async Task<bool> CheckIfFileExists(this IRepositoryContentsClient client, long repositoryId, string path)
+        public static async Task<bool> CheckIfFileExists(this IRepositoryContentsClient client, long repositoryId,
+            string path)
         {
             try
             {
-                var result = await client.GetAllContents(repositoryId, path);
+                await client.GetAllContents(repositoryId, path);
                 return true;
             }
             catch (Exception)
@@ -21,8 +22,9 @@ namespace AutoGit.Core.Extensions
 
             return false;
         }
-        
-        public static async Task<RepositoryContent> GetAllContentsOrNull(this IRepositoryContentsClient client, long repositoryId, string path)
+
+        public static async Task<RepositoryContent> GetAllContentsOrNull(this IRepositoryContentsClient client,
+            long repositoryId, string path)
         {
             try
             {

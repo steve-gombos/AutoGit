@@ -22,14 +22,14 @@ namespace AutoGit.Core.Services
         {
             var appClient = CreateAppClient();
             var installationClient = await CreateInstallationClient(appClient);
-            
+
             return new GitHubClients(appClient, installationClient);
         }
-        
+
         private GitHubClient CreateAppClient()
         {
             var accessToken = _accessTokenFactory.Create(_options.AppIdentifier.ToString(), _options.PrivateKey);
-            
+
             return new ResilientGitHubClientFactory().Create(new ProductHeaderValue(_options.AppName),
                 new Credentials(accessToken, AuthenticationType.Bearer), _options.Url, new InMemoryCacheProvider());
         }
@@ -37,7 +37,7 @@ namespace AutoGit.Core.Services
         private async Task<GitHubClient> CreateInstallationClient(GitHubClient appClient)
         {
             var installations = await appClient.GitHubApps.GetAllInstallationsForCurrent();
-            
+
             if (installations == null || !installations.Any())
                 return null;
 
@@ -47,7 +47,7 @@ namespace AutoGit.Core.Services
                 return null;
 
             var accessToken = await appClient.GitHubApps.CreateInstallationToken(installation.Id);
-            
+
             return new ResilientGitHubClientFactory()
                 .Create(new ProductHeaderValue($"{_options.AppName}-Installation{installation.Id}"),
                     new Credentials(accessToken.Token), _options.Url, new InMemoryCacheProvider());

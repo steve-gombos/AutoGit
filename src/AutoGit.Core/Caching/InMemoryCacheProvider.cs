@@ -8,10 +8,11 @@ namespace AutoGit.Core.Caching
     {
         private readonly MemoryCache _cache;
 
-        public InMemoryCacheProvider(MemoryCacheOptions memoryCacheOptions=null)
+        public InMemoryCacheProvider(MemoryCacheOptions memoryCacheOptions = null)
         {
-            _cache= new MemoryCache(memoryCacheOptions?? new MemoryCacheOptions());
+            _cache = new MemoryCache(memoryCacheOptions ?? new MemoryCacheOptions());
         }
+
         public Task Add(CacheKey key, CacheEntry entry)
         {
             _cache.Set(key, entry);

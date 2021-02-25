@@ -10,15 +10,8 @@ namespace AutoGit.Core.Caching
 {
     public class CacheEntry
     {
-        public CacheKey Key { get; internal set; }
-        public HttpStatusCode StatusCode { get; internal set; }
-        public bool HasValidator => ETag != null || (Content != null && LastModified != null);
-        public DateTimeOffset? LastModified { get; internal set; }
-        public EntityTagHeaderValue ETag { get; internal set; }
-        public byte[] Content { get; internal set; }
-        public Dictionary<string, IEnumerable<string>> ContentHeaders { get; internal set; } = new Dictionary<string, IEnumerable<string>>();
-
-        public CacheEntry(CacheKey key,HttpStatusCode statusCode,DateTimeOffset? lastModified,EntityTagHeaderValue etag,byte[] content,
+        public CacheEntry(CacheKey key, HttpStatusCode statusCode, DateTimeOffset? lastModified,
+            EntityTagHeaderValue etag, byte[] content,
             Dictionary<string, IEnumerable<string>> contentHeaders)
         {
             Key = key;
@@ -31,8 +24,17 @@ namespace AutoGit.Core.Caching
 
         private CacheEntry()
         {
-
         }
+
+        public CacheKey Key { get; internal set; }
+        public HttpStatusCode StatusCode { get; internal set; }
+        public bool HasValidator => ETag != null || Content != null && LastModified != null;
+        public DateTimeOffset? LastModified { get; internal set; }
+        public EntityTagHeaderValue ETag { get; internal set; }
+        public byte[] Content { get; internal set; }
+
+        public Dictionary<string, IEnumerable<string>> ContentHeaders { get; internal set; } =
+            new Dictionary<string, IEnumerable<string>>();
 
         public static async Task<CacheEntry> Create(HttpResponseMessage response)
         {
@@ -44,7 +46,7 @@ namespace AutoGit.Core.Caching
             cacheEntry.LastModified = response.Content?.Headers?.LastModified;
 
             await FillContent(response, cacheEntry).ConfigureAwait(false);
-            FillContentHeader(response,cacheEntry);
+            FillContentHeader(response, cacheEntry);
 
             return cacheEntry;
         }
@@ -54,13 +56,10 @@ namespace AutoGit.Core.Caching
             if (response.Content == null)
                 return;
 
-            foreach (var header in response.Content.Headers)
-            {
-                cacheEntry.ContentHeaders[header.Key] = header.Value;
-            }
+            foreach (var header in response.Content.Headers) cacheEntry.ContentHeaders[header.Key] = header.Value;
         }
 
-        private static async Task FillContent(HttpResponseMessage response,CacheEntry entry)
+        private static async Task FillContent(HttpResponseMessage response, CacheEntry entry)
         {
             if (response.Content == null)
                 return;
@@ -77,7 +76,7 @@ namespace AutoGit.Core.Caching
         internal static HttpResponseMessage CreateHttpResponseMessage(CacheEntry entry, HttpResponseMessage response)
         {
             var newResponse = new HttpResponseMessage(entry.StatusCode);
-            
+
             foreach (var v in response.Headers)
                 newResponse.Headers.TryAddWithoutValidation(v.Key, v.Value);
 
@@ -92,6 +91,5 @@ namespace AutoGit.Core.Caching
 
             return newResponse;
         }
-
     }
 }
