@@ -27,7 +27,10 @@ namespace AutoGit.Jobs.DependencyInjection
 
             var optionsAccessor = app.ApplicationServices.GetService<IOptions<AutoGitJobOptions>>();
             
-            optionsAccessor?.Value.Jobs.ForEach(j => { j.Invoke(app.ApplicationServices); });
+            optionsAccessor?.Value.Jobs.ForEach(j =>
+            {
+                j.Invoke(app.ApplicationServices);
+            });
 
             return app;
         }

@@ -1,6 +1,8 @@
 ﻿using AutoGit.Core.Interfaces;
 using AutoGit.Jobs.Filters;
 using Hangfire;
+using Hangfire.Console;
+using Hangfire.Console.Extensions;
 using Hangfire.Dashboard;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +27,10 @@ namespace AutoGit.Jobs.DependencyInjection
 
             builder.Services.AddHangfire(options =>
             {
+                options.UseConsole();
+                options.UseSimpleAssemblyNameTypeSerializer();
+                options.UseRecommendedSerializerSettings();
+                
                 if (!string.IsNullOrWhiteSpace(jobOptions.ConnectionString))
                 {
                     options.UseSqlServerStorage(jobOptions.ConnectionString);    
@@ -34,6 +40,8 @@ namespace AutoGit.Jobs.DependencyInjection
                     options.UseMemoryStorage();
                 }
             });
+
+            builder.Services.AddHangfireConsoleExtensions();
 
             builder.Services.AddHangfireServer();
 
