@@ -1,12 +1,10 @@
-﻿using AutoGit.Jobs.Logging;
-using Hangfire.Common;
-using Hangfire.Server;
+﻿using Hangfire.Common;
 using System;
 
 namespace AutoGit.Jobs.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class StandardJobAttribute : JobFilterAttribute, IServerFilter
+    public class StandardJobAttribute : JobFilterAttribute
     {
         private IDisposable _subscription;
         
@@ -16,14 +14,5 @@ namespace AutoGit.Jobs.Attributes
         }
 
         public bool RunOnStart { get; }
-
-        public void OnPerforming(PerformingContext filterContext)
-        {
-            _subscription = HangfireConsoleLogger.InContext(filterContext);
-        }
-        public void OnPerformed(PerformedContext filterContext)
-        {
-            _subscription?.Dispose();
-        }
     }
 }

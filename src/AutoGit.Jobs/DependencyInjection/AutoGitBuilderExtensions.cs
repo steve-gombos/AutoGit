@@ -1,10 +1,9 @@
 ﻿using AutoGit.Core.Interfaces;
-using AutoGit.Jobs.Logging;
 using Hangfire;
 using Hangfire.Console;
+using Hangfire.Console.Extensions;
 using Hangfire.MemoryStorage;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 
 namespace AutoGit.Jobs.DependencyInjection
@@ -24,8 +23,9 @@ namespace AutoGit.Jobs.DependencyInjection
             builder.Services.AddHangfire(options =>
             {
                 options.UseConsole();
-                // options.UseSimpleAssemblyNameTypeSerializer();
-                // options.UseRecommendedSerializerSettings();
+                options.SetDataCompatibilityLevel(CompatibilityLevel.Version_170);
+                options.UseSimpleAssemblyNameTypeSerializer();
+                options.UseRecommendedSerializerSettings();
                 
                 if (!string.IsNullOrWhiteSpace(jobOptions.ConnectionString))
                 {
@@ -36,9 +36,8 @@ namespace AutoGit.Jobs.DependencyInjection
                     options.UseMemoryStorage();
                 }
             });
-
-            builder.Services.AddSingleton<ILoggerProvider, HangfireConsoleLoggerProvider>();
-            //builder.Services.AddHangfireConsoleExtensions();
+            
+            builder.Services.AddHangfireConsoleExtensions();
 
             builder.Services.AddHangfireServer();
 
