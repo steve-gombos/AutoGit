@@ -13,24 +13,22 @@ namespace AutoGit.Jobs.DependencyInjection
         public static IApplicationBuilder UseAutoGitScheduler(this IApplicationBuilder app)
         {
             app.UseRouting();
-            
-            //TODO: make this configurable
-            app.UseHangfireDashboard("/jobs", new DashboardOptions
-            {
-                Authorization = new List<IDashboardAuthorizationFilter>
-                {
-                    new NullAuthorizationFilter()
-                }
-            });
 
-            app.UseEndpoints(endpoints => { endpoints.MapHangfireDashboard(); });
+            app.UseEndpoints(endpoints =>
+            {
+                //TODO: Make this configurable
+                endpoints.MapHangfireDashboard("/jobs", new DashboardOptions
+                {
+                    Authorization = new List<IDashboardAuthorizationFilter>
+                    {
+                        new NullAuthorizationFilter()
+                    }
+                });
+            });
 
             var optionsAccessor = app.ApplicationServices.GetService<IOptions<AutoGitJobOptions>>();
-            
-            optionsAccessor?.Value.Jobs.ForEach(j =>
-            {
-                j.Invoke(app.ApplicationServices);
-            });
+
+            optionsAccessor?.Value.Jobs.ForEach(j => { j.Invoke(app.ApplicationServices); });
 
             return app;
         }

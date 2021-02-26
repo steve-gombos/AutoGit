@@ -26,7 +26,7 @@ namespace AutoGit.Bot
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
             var autoGitOptions = Configuration.GetSection("GitHub").Get<AutoGitOptions>();
 
             var webHookSecret = Configuration.GetValue<string>("GitHub:WebHookSecret");
@@ -58,23 +58,18 @@ namespace AutoGit.Bot
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseRouting();
 
             app.UseAutoGitScheduler();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapAutoGitEndpoints();
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("<a href=\"\\jobs\\\">Dashboard</a>");
-                });
+                endpoints.MapGet("/",
+                    async context => { await context.Response.WriteAsync("<a href=\"\\jobs\\\">Dashboard</a>"); });
             });
         }
     }

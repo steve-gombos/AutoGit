@@ -38,7 +38,7 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
             // Assert
             service.Should().BeAssignableTo(serviceType);
         }
-        
+
         [Fact]
         public void ServiceProvider_Should_Have_Jobs_When_Added_With_Generic()
         {
@@ -50,7 +50,7 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
 
             // Act
             var service = provider.GetService<JobStorage>();
-            
+
             // Assert
             service.GetConnection().GetRecurringJobs().Count().Should().Be(1);
         }

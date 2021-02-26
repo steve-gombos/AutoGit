@@ -1,5 +1,6 @@
 ﻿using AutoGit.Jobs.Attributes;
 using AutoGit.Jobs.Interfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace AutoGit.Jobs.UnitTests.Fakers
@@ -9,9 +10,10 @@ namespace AutoGit.Jobs.UnitTests.Fakers
     {
         public string RepositoryOwner { get; }
         public string RepositoryName { get; }
+
         public Task Execute()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

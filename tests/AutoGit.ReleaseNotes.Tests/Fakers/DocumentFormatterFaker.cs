@@ -12,7 +12,7 @@ namespace AutoGit.ReleaseNotes.Tests.Fakers
             UseSeed(Constants.DataSeed);
 
             Configure(x => { x.WithBinder<NSubstituteBinder>(); });
-            
+
             RuleFor(x => x.Type, f => f.Random.Enum<FormatterTypes>());
         }
     }

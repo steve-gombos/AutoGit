@@ -12,21 +12,22 @@ namespace AutoGit.Bot.Jobs
         private readonly IGitHubClientFactory _gitHubClientFactory;
         private readonly ILogger<SimpleJob> _logger;
 
-        public SimpleJob(IGitHubClientFactory gitHubClientFactory, ILogger<SimpleJob> logger) : base("steve-gombos", "test")
+        public SimpleJob(IGitHubClientFactory gitHubClientFactory, ILogger<SimpleJob> logger) : base("steve-gombos",
+            "test")
         {
             _gitHubClientFactory = gitHubClientFactory;
             _logger = logger;
         }
-        
+
         public override async Task Execute()
         {
             _logger.LogInformation("Started job");
-            
+
             var clients = await _gitHubClientFactory.Create();
 
             // var issue = await clients.InstallationClient.Issue.Create(RepositoryOwner, RepositoryName,
             //     new NewIssue($"Issue - {DateTime.Now}"));
-            
+
             _logger.LogInformation("Completed job");
         }
     }

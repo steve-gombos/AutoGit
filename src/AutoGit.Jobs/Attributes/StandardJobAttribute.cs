@@ -7,7 +7,7 @@ namespace AutoGit.Jobs.Attributes
     public class StandardJobAttribute : JobFilterAttribute
     {
         private IDisposable _subscription;
-        
+
         public StandardJobAttribute(bool runOnStart = false)
         {
             RunOnStart = runOnStart;

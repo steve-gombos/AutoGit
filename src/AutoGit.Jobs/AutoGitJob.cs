@@ -10,6 +10,7 @@ namespace AutoGit.Jobs
             RepositoryOwner = repositoryOwner;
             RepositoryName = repositoryName;
         }
+
         public string RepositoryOwner { get; }
         public string RepositoryName { get; }
         public abstract Task Execute();

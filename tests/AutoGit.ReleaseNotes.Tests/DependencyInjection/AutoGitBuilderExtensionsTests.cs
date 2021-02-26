@@ -2,16 +2,12 @@
 using AutoGit.Core.Interfaces;
 using AutoGit.ReleaseNotes.DependencyInjection;
 using AutoGit.ReleaseNotes.Interfaces;
-using AutoGit.WebHooks;
 using AutoGit.WebHooks.DependencyInjection;
 using AutoGit.WebHooks.Interfaces;
-using AutoGit.WebHooks.Models.Validators;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace AutoGit.ReleaseNotes.Tests.DependencyInjection

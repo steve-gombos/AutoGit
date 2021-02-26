@@ -3,6 +3,7 @@ using Hangfire;
 using Hangfire.Console;
 using Hangfire.Console.Extensions;
 using Hangfire.MemoryStorage;
+using Hangfire.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -17,7 +18,7 @@ namespace AutoGit.Jobs.DependencyInjection
             setupAction?.Invoke(jobOptions);
 
             builder.Services.Configure(setupAction);
-            
+
             builder.Services.AddRouting();
 
             builder.Services.AddHangfire(options =>
@@ -26,17 +27,23 @@ namespace AutoGit.Jobs.DependencyInjection
                 options.SetDataCompatibilityLevel(CompatibilityLevel.Version_170);
                 options.UseSimpleAssemblyNameTypeSerializer();
                 options.UseRecommendedSerializerSettings();
-                
+
                 if (!string.IsNullOrWhiteSpace(jobOptions.ConnectionString))
                 {
-                    options.UseSqlServerStorage(jobOptions.ConnectionString);    
+                    options.UseSqlServerStorage(jobOptions.ConnectionString,new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    });
+                    return;
                 }
-                else
-                {
-                    options.UseMemoryStorage();
-                }
+                
+                options.UseMemoryStorage();
             });
-            
+
             builder.Services.AddHangfireConsoleExtensions();
 
             builder.Services.AddHangfireServer();

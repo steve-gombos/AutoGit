@@ -18,7 +18,7 @@ namespace AutoGit.Jobs.UnitTests.Attributes
             // Assert
             job.GetType().Should().BeDecoratedWith<StandardJobAttribute>();
         }
-        
+
         [Fact]
         public void Job_Should_Be_Decorated_With_RecurringAttribute()
         {

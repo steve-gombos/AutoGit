@@ -31,7 +31,8 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
             var endpointBuilder = endpoint as IEndpointRouteBuilder;
 
             // Assert
-            endpointBuilder.DataSources.Any(x => x.Endpoints.Any(e => e.DisplayName.Contains("hangfire"))).Should().BeTrue();
+            endpointBuilder.DataSources.Any(x => x.Endpoints.Any(e => e.DisplayName.Contains("jobs"))).Should()
+                .BeTrue();
         }
     }
 }

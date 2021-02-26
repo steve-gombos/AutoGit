@@ -13,6 +13,7 @@ namespace AutoGit.WebHooks
             Actions = actions;
             IncludeBotEvents = includeBotEvents;
         }
+
         public string EventName { get; set; }
         public List<string> Actions { get; set; }
         public bool IncludeBotEvents { get; set; }
