@@ -1,6 +1,8 @@
 ﻿using AutoGit.Jobs.Attributes;
+using AutoGit.Jobs.Extensions;
 using AutoGit.Jobs.Interfaces;
 using Hangfire;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,7 @@ namespace AutoGit.Jobs
                     switch (attribute)
                     {
                         case RecurringJobAttribute recurrentJobAttribute:
-                            RecurringJob.AddOrUpdate<TJob>(job => job.Execute(), recurrentJobAttribute.CronExpression);
+                            RecurringJob.AddOrUpdate<TJob>(job => job.Execute(), recurrentJobAttribute.CronExpression, recurrentJobAttribute.TimeZone.GetTimeZoneInfo());
                             break;
                     }
                 }
