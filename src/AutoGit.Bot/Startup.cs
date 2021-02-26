@@ -5,7 +5,6 @@ using AutoGit.Core.DependencyInjection;
 using AutoGit.Jobs.DependencyInjection;
 using AutoGit.ReleaseNotes.DependencyInjection;
 using AutoGit.WebHooks.DependencyInjection;
-using Hangfire.Console.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +25,8 @@ namespace AutoGit.Bot
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            
             var autoGitOptions = Configuration.GetSection("GitHub").Get<AutoGitOptions>();
 
             var webHookSecret = Configuration.GetValue<string>("GitHub:WebHookSecret");
@@ -55,7 +56,7 @@ namespace AutoGit.Bot
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IJobManager jobManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -68,6 +69,7 @@ namespace AutoGit.Bot
             
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapAutoGitEndpoints();
                 endpoints.MapGet("/", async context =>
                 {
