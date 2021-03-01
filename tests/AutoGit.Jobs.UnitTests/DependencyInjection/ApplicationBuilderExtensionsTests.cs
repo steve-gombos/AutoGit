@@ -16,7 +16,7 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
         public ApplicationBuilderExtensionsTests()
         {
             var services = new ServiceCollection();
-            services.AddGitHubBot(options => { }).AddJobs(options => { });
+            services.AddGitHubBot(options => { }).AddJobs(options => { options.EnableConsoleLogging = false; });
             _sut = new ApplicationBuilder(services.BuildServiceProvider());
         }
 

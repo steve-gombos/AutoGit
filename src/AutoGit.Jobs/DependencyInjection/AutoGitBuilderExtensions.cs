@@ -23,7 +23,11 @@ namespace AutoGit.Jobs.DependencyInjection
 
             builder.Services.AddHangfire(options =>
             {
-                options.UseConsole();
+                if (jobOptions.EnableConsoleLogging)
+                {
+                    options.UseConsole();
+                }
+
                 options.SetDataCompatibilityLevel(CompatibilityLevel.Version_170);
                 options.UseSimpleAssemblyNameTypeSerializer();
                 options.UseRecommendedSerializerSettings();
@@ -44,7 +48,10 @@ namespace AutoGit.Jobs.DependencyInjection
                 options.UseMemoryStorage();
             });
 
-            builder.Services.AddHangfireConsoleExtensions();
+            if (jobOptions.EnableConsoleLogging)
+            {
+                builder.Services.AddHangfireConsoleExtensions();
+            }
 
             builder.Services.AddHangfireServer();
 

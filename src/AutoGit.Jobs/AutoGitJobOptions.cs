@@ -12,6 +12,7 @@ namespace AutoGit.Jobs
     public class AutoGitJobOptions
     {
         public string ConnectionString { get; set; }
+        public bool EnableConsoleLogging { get; set; } = true;
         internal List<Action<IServiceProvider>> Jobs { get; } = new List<Action<IServiceProvider>>();
 
         public void AddRecurringJob<TJob>() where TJob : IAutoGitJob
