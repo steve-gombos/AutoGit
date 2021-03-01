@@ -1,17 +1,17 @@
 ﻿using AutoGit.Jobs.Attributes;
-using AutoGit.Jobs.Interfaces;
 using System;
 using System.Threading.Tasks;
 
 namespace AutoGit.Jobs.UnitTests.Fakers
 {
     [StandardJob]
-    public class TestStandardJob : IAutoGitJob
+    public class TestStandardJob : AutoGitJob
     {
-        public string RepositoryOwner { get; }
-        public string RepositoryName { get; }
-
-        public Task Execute()
+        public TestStandardJob(string repositoryOwner, string repositoryName) : base(repositoryOwner, repositoryName)
+        {
+        }
+        
+        public override Task Execute()
         {
             throw new NotImplementedException();
         }

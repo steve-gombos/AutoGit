@@ -11,7 +11,7 @@ namespace AutoGit.Jobs.UnitTests.Attributes
         public void Job_Should_Be_Decorated_With_StandardAttribute()
         {
             // Arrange
-            var job = new TestStandardJob();
+            var job = new TestStandardJob("test", "test");
 
             // Act
 
@@ -23,7 +23,7 @@ namespace AutoGit.Jobs.UnitTests.Attributes
         public void Job_Should_Be_Decorated_With_RecurringAttribute()
         {
             // Arrange
-            var job = new TestRecurringJob();
+            var job = new TestRecurringJob("test", "test");
 
             // Act
 
