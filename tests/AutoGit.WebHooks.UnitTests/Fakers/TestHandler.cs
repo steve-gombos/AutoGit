@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace AutoGit.WebHooks.UnitTests.Fakers
 {
-    public class TestHandler : IWebHookHandler
+    public class TestHandler : WebHookHandler
     {
-        public string EventName { get; set; }
-        public List<string> Actions { get; set; }
-        public bool IncludeBotEvents { get; set; }
+        public TestHandler() : base("test", new List<string>(){"test"})
+        {
+        }
+        
+        public TestHandler(string eventName, List<string> actions, bool includeBotEvents) : base(eventName, actions, includeBotEvents)
+        {
+        }
 
-        public Task Handle(EventContext eventContext)
+        
+        public override Task Handle(EventContext eventContext)
         {
             throw new NotImplementedException();
         }

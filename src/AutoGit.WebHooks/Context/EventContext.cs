@@ -6,7 +6,7 @@ namespace AutoGit.WebHooks.Context
 {
     public class EventContext
     {
-        internal EventContext(HttpContext httpContext, WebHookEvent webHookEvent, GitHubClients clients)
+        public EventContext(HttpContext httpContext, WebHookEvent webHookEvent, GitHubClients clients)
         {
             HttpContext = httpContext;
             WebHookEvent = webHookEvent;
