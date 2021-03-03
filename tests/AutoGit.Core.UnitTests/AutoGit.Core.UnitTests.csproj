@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.15.0" />
+        <PackageReference Include="AutoBogus" Version="2.12.0" />
+        <PackageReference Include="AutoBogus.NSubstitute" Version="2.12.0" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Include="NSubstitute" Version="4.2.2" />
@@ -25,6 +26,10 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\AutoGit.Core\AutoGit.Core.csproj" />
       <ProjectReference Include="..\..\src\AutoGit.WebHooks\AutoGit.WebHooks.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Fakes" />
     </ItemGroup>
 
 </Project>
