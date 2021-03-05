@@ -1,4 +1,5 @@
 ﻿using AutoGit.Core.Interfaces;
+using AutoGit.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Octokit;
 using System;
