@@ -20,7 +20,7 @@ namespace AutoGit.Jobs.DependencyInjection
             builder.Services.Configure(setupAction);
 
             builder.Services.AddRouting();
-
+            
             builder.Services.AddHangfire(options =>
             {
                 if (jobOptions.EnableConsoleLogging)
@@ -31,7 +31,7 @@ namespace AutoGit.Jobs.DependencyInjection
                 options.SetDataCompatibilityLevel(CompatibilityLevel.Version_170);
                 options.UseSimpleAssemblyNameTypeSerializer();
                 options.UseRecommendedSerializerSettings();
-
+                
                 if (!string.IsNullOrWhiteSpace(jobOptions.ConnectionString))
                 {
                     options.UseSqlServerStorage(jobOptions.ConnectionString,new SqlServerStorageOptions

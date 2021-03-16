@@ -43,7 +43,7 @@ namespace AutoGit.Jobs.UnitTests.DependencyInjection
         public void ServiceProvider_Should_Have_Jobs_When_Added_With_Generic()
         {
             // Arrange
-            _sut.AddJobs(options => { options.AddRecurringJob<TestRecurringJob>(); });
+            _sut.AddJobs(options => { options.AddRecurringJob<TestRecurringJob>("* * * * * *", TimeZoneInfo.Local); });
             var provider = _sut.Services.BuildServiceProvider();
             var appBuilder = new ApplicationBuilder(provider);
             appBuilder.UseAutoGitScheduler();

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace AutoGit.Bot
 {
@@ -45,7 +46,7 @@ namespace AutoGit.Bot
                 .AddJobs(options =>
                 {
                     options.ConnectionString = Configuration.GetConnectionString("AutoGit");
-                    options.AddRecurringJob<SimpleJob>();
+                    options.AddRecurringJob<SimpleJob>("0/5 * * * *", TimeZoneInfo.Local);
                 })
                 .AddReleaseNoteGenerator(options =>
                 {

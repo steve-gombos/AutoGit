@@ -1,10 +1,8 @@
-﻿using AutoGit.Jobs.Attributes;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace AutoGit.Jobs.UnitTests.Fakers
 {
-    [StandardJob]
     public class TestStandardJob : AutoGitJob
     {
         public TestStandardJob(string repositoryOwner, string repositoryName) : base(repositoryOwner, repositoryName)
